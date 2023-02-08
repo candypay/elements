@@ -1,10 +1,17 @@
-import { Button } from "ui";
+import { PayElement } from "elements";
 
 export default function Web() {
   return (
-    <div>
-      <h1>Web</h1>
-      <Button />
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      <PayElement />
     </div>
   );
 }

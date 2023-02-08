@@ -1,0 +1,5 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@500,400&display=swap");
+
+* {
+  font-family: "Satoshi", sans-serif;
+}
