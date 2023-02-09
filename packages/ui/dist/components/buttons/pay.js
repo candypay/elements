@@ -205,7 +205,7 @@ var PayButton = ({
     onError: (error) => {
     }
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: amount ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     import_react.Button,
     {
       px: "16",
@@ -220,9 +220,10 @@ var PayButton = ({
       transition: "all 0.2s ease-in-out",
       onClick: () => mutate(),
       isLoading,
+      isDisabled: !amount,
       children: "Pay with CandyPay"
     }
-  );
+  ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Skeleton, { w: "full", h: "10", rounded: "md" }) });
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

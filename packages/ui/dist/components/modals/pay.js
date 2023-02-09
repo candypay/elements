@@ -261,7 +261,7 @@ var PayButton = ({
     onError: (error) => {
     }
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: amount ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
     import_react4.Button,
     {
       px: "16",
@@ -276,9 +276,10 @@ var PayButton = ({
       transition: "all 0.2s ease-in-out",
       onClick: () => mutate(),
       isLoading,
+      isDisabled: !amount,
       children: "Pay with CandyPay"
     }
-  );
+  ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react4.Skeleton, { w: "full", h: "10", rounded: "md" }) });
 };
 
 // src/components/elements/methods.tsx

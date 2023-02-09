@@ -1,7 +1,7 @@
 import { IIntent, TTokens } from "@/typings";
 import { generateTxn } from "@/utils/sendTxn";
 import { updateTxn } from "@/utils/updateTxn";
-import { Button } from "@chakra-ui/react";
+import { Button, Skeleton } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation } from "@tanstack/react-query";
 import { FC } from "react";
@@ -47,22 +47,29 @@ const PayButton: FC<IProps> = ({
   });
 
   return (
-    <Button
-      px="16"
-      w="full"
-      rounded="md"
-      fontWeight="medium"
-      h="10"
-      bgColor="#8B55FF"
-      color="white"
-      _hover={{ bgColor: "#7C4DFF" }}
-      _active={{ bgColor: "#6B45FF" }}
-      transition="all 0.2s ease-in-out"
-      onClick={() => mutate()}
-      isLoading={isLoading}
-    >
-      Pay with CandyPay
-    </Button>
+    <>
+      {amount ? (
+        <Button
+          px="16"
+          w="full"
+          rounded="md"
+          fontWeight="medium"
+          h="10"
+          bgColor="#8B55FF"
+          color="white"
+          _hover={{ bgColor: "#7C4DFF" }}
+          _active={{ bgColor: "#6B45FF" }}
+          transition="all 0.2s ease-in-out"
+          onClick={() => mutate()}
+          isLoading={isLoading}
+          isDisabled={!amount}
+        >
+          Pay with CandyPay
+        </Button>
+      ) : (
+        <Skeleton w="full" h="10" rounded="md" />
+      )}
+    </>
   );
 };
 
