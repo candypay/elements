@@ -20,11 +20,14 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/lib/constants/urls.ts
 var urls_exports = {};
 __export(urls_exports, {
+  DEV_API_URL: () => DEV_API_URL,
   PAY_API_URL: () => PAY_API_URL
 });
 module.exports = __toCommonJS(urls_exports);
 var PAY_API_URL = "https://pay.candypay.fun";
+var DEV_API_URL = "https://checkout-dev-api.candypay.fun";
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  DEV_API_URL,
   PAY_API_URL
 });

@@ -1,9 +1,14 @@
 export { ICheckoutContext } from './Context.js';
+import { CreateIntentResponse } from '@candypay/checkout-sdk';
+export { IIntent } from './intent.js';
 
 interface IPayProps {
     method: TTokens;
     onSuccess?: Function;
     onError?: Function;
+}
+interface IProps {
+    intentHandler: () => Promise<CreateIntentResponse>;
 }
 
 type TTokens = "sol" | "usdc" | "shdw" | "dust";
@@ -17,4 +22,4 @@ interface IMethodProps {
     method: TTokens;
 }
 
-export { IMethodProps, IMethods, IPayProps, TTokens };
+export { IMethodProps, IMethods, IPayProps, IProps, TTokens };

@@ -1,6 +1,13 @@
+import { CreateIntentResponse } from "@candypay/checkout-sdk";
+import axios from "axios";
 import { PayElement } from "elements";
 
 export default function Web() {
+  const intentHandler = async (): Promise<CreateIntentResponse> => {
+    const res = await axios.post("/api/intent/create");
+    return res.data;
+  };
+
   return (
     <div
       style={{
@@ -11,7 +18,7 @@ export default function Web() {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <PayElement />
+      <PayElement intentHandler={intentHandler} />
     </div>
   );
 }

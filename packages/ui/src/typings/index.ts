@@ -13,3 +13,4 @@ export interface IMethodProps {
 
 export * from "./Context";
 export * from "./props";
+export * from "./intent";

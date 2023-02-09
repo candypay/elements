@@ -115,6 +115,7 @@ var MAINNET_TOKENS = {
 
 // src/lib/constants/urls.ts
 var PAY_API_URL = "https://pay.candypay.fun";
+var DEV_API_URL = "https://checkout-dev-api.candypay.fun";
 
 // src/lib/index.ts
 var reference = import_web3.Keypair.generate();
@@ -147,25 +148,62 @@ var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null,
   }
 });
 
+// src/utils/updateTxn.ts
+var import_axios2 = __toESM(require("axios"));
+var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, null, function* () {
+  const options = {
+    method: "PATCH",
+    url: `${DEV_API_URL}/api/v1/intent`,
+    headers: {
+      Authorization: `Bearer ${intent_secret_key}`
+    },
+    data: {
+      session_id,
+      signature,
+      timestamp: new Date().toISOString()
+    }
+  };
+  try {
+    const res = yield (0, import_axios2.default)(options);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // src/components/buttons/pay.tsx
 var import_react = require("@chakra-ui/react");
 var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
 var import_react_query = require("@tanstack/react-query");
 var import_jsx_runtime = require("react/jsx-runtime");
-var PayButton = ({ method }) => {
+var PayButton = ({
+  method,
+  amount,
+  intentData,
+  merchant,
+  onClose
+}) => {
   const { publicKey, sendTransaction } = (0, import_wallet_adapter_react.useWallet)();
   const { connection } = (0, import_wallet_adapter_react.useConnection)();
   const { mutate, isLoading } = (0, import_react_query.useMutation)({
     mutationFn: () => __async(void 0, null, function* () {
-      const txn = yield generateTxn(
-        method,
-        publicKey == null ? void 0 : publicKey.toString(),
-        1,
-        publicKey
-      );
+      const txn = yield generateTxn(method, merchant, amount, publicKey);
       const signature = yield sendTransaction(txn, connection);
-      return signature;
-    })
+      const res = yield updateTxn(
+        intentData.sessionId,
+        signature,
+        intentData.intentSecret
+      );
+      return res;
+    }),
+    onSuccess: (data) => {
+      if (!data.error) {
+        console.log("success");
+        onClose();
+      }
+    },
+    onError: (error) => {
+    }
   });
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     import_react.Button,

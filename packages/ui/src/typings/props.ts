@@ -1,3 +1,4 @@
+import { CreateIntentResponse } from "@candypay/checkout-sdk";
 import { TTokens } from ".";
 
 interface IPayProps {
@@ -6,4 +7,8 @@ interface IPayProps {
   onError?: Function;
 }
 
-export type { IPayProps };
+interface IProps {
+  intentHandler: () => Promise<CreateIntentResponse>;
+}
+
+export type { IPayProps, IProps };

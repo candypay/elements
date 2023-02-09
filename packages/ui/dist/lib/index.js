@@ -22,6 +22,7 @@ var lib_exports = {};
 __export(lib_exports, {
   DEVNET_SUPPORTED_SPL_TOKENS: () => DEVNET_SUPPORTED_SPL_TOKENS,
   DEVNET_TOKENS: () => DEVNET_TOKENS,
+  DEV_API_URL: () => DEV_API_URL,
   DevnetTokens: () => DevnetTokens,
   MAINNET_SUPPORTED_SPL_TOKENS: () => MAINNET_SUPPORTED_SPL_TOKENS,
   MAINNET_TOKENS: () => MAINNET_TOKENS,
@@ -117,6 +118,7 @@ var DEVNET_TOKENS = {
 
 // src/lib/constants/urls.ts
 var PAY_API_URL = "https://pay.candypay.fun";
+var DEV_API_URL = "https://checkout-dev-api.candypay.fun";
 
 // src/lib/index.ts
 var reference = import_web3.Keypair.generate();
@@ -124,6 +126,7 @@ var reference = import_web3.Keypair.generate();
 0 && (module.exports = {
   DEVNET_SUPPORTED_SPL_TOKENS,
   DEVNET_TOKENS,
+  DEV_API_URL,
   DevnetTokens,
   MAINNET_SUPPORTED_SPL_TOKENS,
   MAINNET_TOKENS,

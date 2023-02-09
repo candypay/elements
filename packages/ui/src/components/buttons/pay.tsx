@@ -1,5 +1,6 @@
-import { TTokens } from "@/typings";
+import { IIntent, TTokens } from "@/typings";
 import { generateTxn } from "@/utils/sendTxn";
+import { updateTxn } from "@/utils/updateTxn";
 import { Button } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation } from "@tanstack/react-query";
@@ -7,25 +8,42 @@ import { FC } from "react";
 
 interface IProps {
   method: TTokens;
+  amount: number;
+  intentData: IIntent;
+  merchant: string;
+  onClose: () => void;
 }
 
-const PayButton: FC<IProps> = ({ method }) => {
+const PayButton: FC<IProps> = ({
+  method,
+  amount,
+  intentData,
+  merchant,
+  onClose,
+}) => {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async () => {
-      const txn = await generateTxn(
-        method,
-        publicKey?.toString()!,
-        1,
-        publicKey!
-      );
+      const txn = await generateTxn(method, merchant, amount, publicKey!);
 
       const signature = await sendTransaction(txn!, connection);
+      const res = await updateTxn(
+        intentData.sessionId,
+        signature,
+        intentData.intentSecret
+      );
 
-      return signature;
+      return res;
     },
+    onSuccess: (data) => {
+      if (!data.error) {
+        console.log("success");
+        onClose();
+      }
+    },
+    onError: (error) => {},
   });
 
   return (

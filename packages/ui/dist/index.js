@@ -117,17 +117,23 @@ var CheckoutProvider = ({ children, publicApiKey }) => {
 // src/components/Pay.tsx
 var import_react9 = require("@chakra-ui/react");
 var import_wallet_adapter_react3 = require("@solana/wallet-adapter-react");
+var import_react_query4 = require("@tanstack/react-query");
+var import_react10 = require("react");
 
 // src/components/buttons/wallet.tsx
-var import_wallet_adapter_react_ui2 = require("@solana/wallet-adapter-react-ui");
+var import_dynamic = __toESM(require("next/dynamic"));
 var import_jsx_runtime3 = require("react/jsx-runtime");
+var WalletMultiButton = (0, import_dynamic.default)(
+  () => import("@solana/wallet-adapter-react-ui").then(
+    (mod) => mod.WalletMultiButton
+  ),
+  {
+    ssr: false
+  }
+);
 var ConnectWallet = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_wallet_adapter_react_ui2.WalletMultiButton, {});
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(WalletMultiButton, {});
 };
-
-// src/components/modals/pay.tsx
-var import_react7 = require("@chakra-ui/react");
-var import_react8 = require("react");
 
 // src/lib/index.ts
 var import_web32 = require("@solana/web3.js");
@@ -194,13 +200,33 @@ var MAINNET_TOKENS = {
 
 // src/lib/constants/urls.ts
 var PAY_API_URL = "https://pay.candypay.fun";
+var DEV_API_URL = "https://checkout-dev-api.candypay.fun";
 
 // src/lib/index.ts
 var reference = import_web32.Keypair.generate();
 
+// src/utils/getIntent.ts
+var import_axios = __toESM(require("axios"));
+var getIntent = (publicApiKey, sessionId) => __async(void 0, null, function* () {
+  const { data } = yield import_axios.default.get(`${DEV_API_URL}/api/v1/intent`, {
+    headers: {
+      Authorization: `Bearer ${publicApiKey}`
+    },
+    params: {
+      session_id: sessionId
+    }
+  });
+  return data;
+});
+
+// src/components/modals/pay.tsx
+var import_react7 = require("@chakra-ui/react");
+var import_react_query3 = require("@tanstack/react-query");
+var import_react8 = require("react");
+
 // src/utils/sendTxn.ts
 var import_web33 = require("@solana/web3.js");
-var import_axios = __toESM(require("axios"));
+var import_axios2 = __toESM(require("axios"));
 var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null, function* () {
   try {
     const fee = 0.01;
@@ -219,10 +245,33 @@ var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null,
         nft_discounts: void 0
       }
     };
-    const { data } = yield import_axios.default.request(options);
+    const { data } = yield import_axios2.default.request(options);
     return import_web33.Transaction.from(Buffer.from(data.transaction, "base64"));
   } catch (error) {
     return null;
+  }
+});
+
+// src/utils/updateTxn.ts
+var import_axios3 = __toESM(require("axios"));
+var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, null, function* () {
+  const options = {
+    method: "PATCH",
+    url: `${DEV_API_URL}/api/v1/intent`,
+    headers: {
+      Authorization: `Bearer ${intent_secret_key}`
+    },
+    data: {
+      session_id,
+      signature,
+      timestamp: new Date().toISOString()
+    }
+  };
+  try {
+    const res = yield (0, import_axios3.default)(options);
+    return res.data;
+  } catch (error) {
+    console.log(error);
   }
 });
 
@@ -231,20 +280,34 @@ var import_react4 = require("@chakra-ui/react");
 var import_wallet_adapter_react2 = require("@solana/wallet-adapter-react");
 var import_react_query2 = require("@tanstack/react-query");
 var import_jsx_runtime4 = require("react/jsx-runtime");
-var PayButton = ({ method }) => {
+var PayButton = ({
+  method,
+  amount,
+  intentData,
+  merchant,
+  onClose
+}) => {
   const { publicKey, sendTransaction } = (0, import_wallet_adapter_react2.useWallet)();
   const { connection } = (0, import_wallet_adapter_react2.useConnection)();
   const { mutate, isLoading } = (0, import_react_query2.useMutation)({
     mutationFn: () => __async(void 0, null, function* () {
-      const txn = yield generateTxn(
-        method,
-        publicKey == null ? void 0 : publicKey.toString(),
-        1,
-        publicKey
-      );
+      const txn = yield generateTxn(method, merchant, amount, publicKey);
       const signature = yield sendTransaction(txn, connection);
-      return signature;
-    })
+      const res = yield updateTxn(
+        intentData.sessionId,
+        signature,
+        intentData.intentSecret
+      );
+      return res;
+    }),
+    onSuccess: (data) => {
+      if (!data.error) {
+        console.log("success");
+        onClose();
+      }
+    },
+    onError: (error) => {
+    }
   });
   return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
     import_react4.Button,
@@ -357,8 +420,19 @@ var Methods = ({ activeMethod, setActiveMethod }) => {
 
 // src/components/modals/pay.tsx
 var import_jsx_runtime7 = require("react/jsx-runtime");
-var PayModal = ({ isOpen, onClose }) => {
+var PayModal = ({ isOpen, onClose, intentData }) => {
+  var _a, _b;
   const [activeMethod, setActiveMethod] = (0, import_react8.useState)("sol");
+  const { publicApiKey } = (0, import_react8.useContext)(CheckoutContext);
+  const { data } = (0, import_react_query3.useQuery)(
+    ["getIntent"],
+    () => __async(void 0, null, function* () {
+      return yield getIntent(publicApiKey, intentData.sessionId);
+    }),
+    {
+      enabled: !!publicApiKey && !!intentData.sessionId
+    }
+  );
   return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react7.Modal, { isOpen, onClose, isCentered: true, children: [
     /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react7.ModalOverlay, {}),
     /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react7.ModalContent, { children: [
@@ -380,7 +454,16 @@ var PayModal = ({ isOpen, onClose }) => {
                 setActiveMethod
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(PayButton, { method: activeMethod })
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+              PayButton,
+              {
+                method: activeMethod,
+                amount: (_a = data == null ? void 0 : data.session) == null ? void 0 : _a.amount,
+                intentData,
+                merchant: (_b = data == null ? void 0 : data.session) == null ? void 0 : _b.merchant,
+                onClose
+              }
+            )
           ]
         }
       )
@@ -390,11 +473,30 @@ var PayModal = ({ isOpen, onClose }) => {
 
 // src/components/Pay.tsx
 var import_jsx_runtime8 = require("react/jsx-runtime");
-var PayElement = () => {
+var PayElement = ({ intentHandler }) => {
   const { isOpen, onClose, onOpen } = (0, import_react9.useDisclosure)();
   const { publicKey } = (0, import_wallet_adapter_react3.useWallet)();
+  const [intentData, setIntentData] = (0, import_react10.useState)({
+    intentSecret: "",
+    sessionId: ""
+  });
+  const { mutate, isLoading } = (0, import_react_query4.useMutation)(
+    ["generateIntent"],
+    () => __async(void 0, null, function* () {
+      const res = yield intentHandler();
+      setIntentData({
+        intentSecret: res.intent_secret_key,
+        sessionId: res.session_id
+      });
+    }),
+    {
+      onSuccess: () => {
+        onOpen();
+      }
+    }
+  );
   return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PayModal, { isOpen, onClose }),
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PayModal, { isOpen, onClose, intentData }),
     publicKey ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
       import_react9.Button,
       {
@@ -407,7 +509,8 @@ var PayElement = () => {
         _hover: { bgColor: "#7C4DFF" },
         _active: { bgColor: "#6B45FF" },
         transition: "all 0.2s ease-in-out",
-        onClick: onOpen,
+        onClick: () => mutate(),
+        isLoading,
         children: "Pay with CandyPay"
       }
     ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ConnectWallet, {})
