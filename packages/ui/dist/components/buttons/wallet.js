@@ -40,7 +40,23 @@ var WalletMultiButton = (0, import_dynamic.default)(
   }
 );
 var ConnectWallet = () => {
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WalletMultiButton, {});
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+    WalletMultiButton,
+    {
+      style: {
+        background: "#8b55ff",
+        color: "#ffffff",
+        borderRadius: "2px",
+        width: "25%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "2.5rem",
+        fontSize: "1rem",
+        fontWeight: 500
+      }
+    }
+  );
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

@@ -5,15 +5,15 @@ import { CandyPayProvider } from "@candypay/react-checkout-sdk";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <CandyPayProvider
+    // <CandyPayProvider
+    //   publicApiKey={process.env[`NEXT_PUBLIC_CP_API`] as string}
+    // >
+    <CheckoutProvider
       publicApiKey={process.env[`NEXT_PUBLIC_CP_API`] as string}
     >
-      <CheckoutProvider
-        publicApiKey={process.env[`NEXT_PUBLIC_CP_API`] as string}
-      >
-        <Component {...pageProps} />
-      </CheckoutProvider>
-    </CandyPayProvider>
+      <Component {...pageProps} />
+    </CheckoutProvider>
+    // </CandyPayProvider>
   );
 };
 

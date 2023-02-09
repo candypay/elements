@@ -12,7 +12,22 @@ const WalletMultiButton = dynamic(
 );
 
 const ConnectWallet: FC = () => {
-  return <WalletMultiButton />;
+  return (
+    <WalletMultiButton
+      style={{
+        background: "#8b55ff",
+        color: "#ffffff",
+        borderRadius: "2px",
+        width: "25%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "2.5rem",
+        fontSize: "1rem",
+        fontWeight: 500,
+      }}
+    />
+  );
 };
 
 export { ConnectWallet };
