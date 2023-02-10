@@ -1,4 +1,4 @@
-import { CheckoutProvider } from "elements";
+import { CheckoutProvider } from "@candypay/elements";
 import { AppProps } from "next/app";
 import { Toaster } from "react-hot-toast";
 import "../styles/fonts.css";

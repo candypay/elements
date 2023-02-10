@@ -1,6 +1,6 @@
 import { CreateIntentResponse } from "@candypay/checkout-sdk";
 import axios from "axios";
-import { PayElement } from "elements";
+import { PayElement } from "@candypay/elements";
 import { toast } from "react-hot-toast";
 
 export default function Web() {
