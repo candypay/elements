@@ -11,8 +11,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "build:ui": "turbo run build --filter elements",
-    "build:web": "turbo run build --filter web"
+    "build:ui": "turbo run build --filter=./packages/ui",
+    "build:web": "turbo run build --filters=./apps/web"
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
