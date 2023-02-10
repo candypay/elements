@@ -77,73 +77,8 @@ var useTheme = () => {
   return { colors, setColors };
 };
 
-// src/components/Pay.tsx
-var import_react10 = require("@chakra-ui/react");
-var import_wallet_adapter_react3 = require("@solana/wallet-adapter-react");
-var import_react_query4 = require("@tanstack/react-query");
-var import_react11 = require("react");
-
-// src/components/buttons/wallet.tsx
-var import_dynamic = __toESM(require("next/dynamic"));
-var import_jsx_runtime = require("react/jsx-runtime");
-var WalletMultiButton = (0, import_dynamic.default)(
-  () => import("@solana/wallet-adapter-react-ui").then(
-    (mod) => mod.WalletMultiButton
-  ),
-  {
-    ssr: false
-  }
-);
-var ConnectWallet = () => {
-  const { colors } = useTheme();
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    WalletMultiButton,
-    {
-      style: {
-        backgroundColor: colors.primary,
-        color: "white",
-        borderRadius: "0.375rem",
-        padding: "0.3rem 1rem",
-        fontWeight: "regular",
-        fontSize: "0.875rem",
-        transition: "all 0.2s ease-in-out",
-        cursor: "pointer",
-        border: "none",
-        width: "18rem",
-        outline: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "2.5rem"
-      }
-    }
-  );
-};
-
-// src/providers/Checkout.tsx
-var import_react3 = require("@chakra-ui/react");
-var import_react_query = require("@tanstack/react-query");
-var import_react4 = require("react");
-
-// src/providers/Wallet.tsx
-var import_wallet_adapter_base = require("@solana/wallet-adapter-base");
-var import_wallet_adapter_glow = require("@solana/wallet-adapter-glow");
-var import_wallet_adapter_phantom = require("@solana/wallet-adapter-phantom");
-var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
-var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
-var import_wallet_adapter_solflare = require("@solana/wallet-adapter-solflare");
-var import_web3 = require("@solana/web3.js");
-var import_react2 = require("react");
-var import_jsx_runtime2 = require("react/jsx-runtime");
-import("@solana/wallet-adapter-react-ui/styles.css");
-
-// src/providers/Checkout.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
-var CheckoutContext = (0, import_react4.createContext)({});
-var queryClient = new import_react_query.QueryClient();
-
 // src/lib/index.ts
-var import_web32 = require("@solana/web3.js");
+var import_web3 = require("@solana/web3.js");
 
 // src/lib/constants/tokens.ts
 var MainnetTokens = /* @__PURE__ */ ((MainnetTokens4) => {
@@ -210,7 +145,7 @@ var PAY_API_URL = "https://pay.candypay.fun";
 var DEV_API_URL = "https://checkout-dev-api.candypay.fun";
 
 // src/lib/index.ts
-var reference = import_web32.Keypair.generate();
+var reference = import_web3.Keypair.generate();
 
 // src/utils/getIntent.ts
 var import_axios = __toESM(require("axios"));
@@ -226,9 +161,89 @@ var getIntent = (publicApiKey, sessionId) => __async(void 0, null, function* () 
   return data;
 });
 
+// src/components/Pay.tsx
+var import_react10 = require("@chakra-ui/react");
+var import_wallet_adapter_react3 = require("@solana/wallet-adapter-react");
+var import_react_query3 = require("@tanstack/react-query");
+var import_react11 = require("react");
+
+// src/providers/Checkout.tsx
+var import_react3 = require("@chakra-ui/react");
+var import_react_query = require("@tanstack/react-query");
+var import_react4 = require("react");
+
+// src/providers/Wallet.tsx
+var import_wallet_adapter_base = require("@solana/wallet-adapter-base");
+var import_wallet_adapter_glow = require("@solana/wallet-adapter-glow");
+var import_wallet_adapter_phantom = require("@solana/wallet-adapter-phantom");
+var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
+var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
+var import_wallet_adapter_solflare = require("@solana/wallet-adapter-solflare");
+var import_web32 = require("@solana/web3.js");
+var import_react2 = require("react");
+var import_jsx_runtime = require("react/jsx-runtime");
+import("@solana/wallet-adapter-react-ui/styles.css");
+
+// src/providers/Checkout.tsx
+var import_jsx_runtime2 = require("react/jsx-runtime");
+var CheckoutContext = (0, import_react4.createContext)({});
+var queryClient = new import_react_query.QueryClient();
+
+// src/components/buttons/wallet.tsx
+var import_dynamic = __toESM(require("next/dynamic"));
+var import_jsx_runtime3 = require("react/jsx-runtime");
+var WalletMultiButton = (0, import_dynamic.default)(
+  () => import("@solana/wallet-adapter-react-ui").then(
+    (mod) => mod.WalletMultiButton
+  ),
+  {
+    ssr: false
+  }
+);
+var ConnectWallet = () => {
+  const { colors } = useTheme();
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+    WalletMultiButton,
+    {
+      style: {
+        backgroundColor: colors.primary,
+        color: "white",
+        borderRadius: "0.375rem",
+        padding: "0.3rem 1rem",
+        fontWeight: "regular",
+        fontSize: "0.875rem",
+        transition: "all 0.2s ease-in-out",
+        cursor: "pointer",
+        border: "none",
+        width: "18rem",
+        outline: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "2.5rem"
+      }
+    }
+  );
+};
+
+// src/utils/resolveAmount.ts
+var resolveAmount = (method, prices, amountInUsdc) => {
+  var _a;
+  if (method === "usdc") {
+    return amountInUsdc;
+  }
+  const amount = (_a = prices.find(
+    (price) => price.token === method
+  )) == null ? void 0 : _a.price;
+  if (Number((amountInUsdc / amount).toFixed(3)) === 0) {
+    return 1e-3;
+  } else {
+    return Number((amountInUsdc / amount).toFixed(3));
+  }
+};
+
 // src/components/modals/pay.tsx
 var import_react8 = require("@chakra-ui/react");
-var import_react_query3 = require("@tanstack/react-query");
 var import_react9 = require("react");
 
 // src/utils/sendTxn.ts
@@ -443,20 +458,10 @@ var PayModal = ({
   intentData,
   onError,
   onSuccess,
-  metadata
+  metadata,
+  prices
 }) => {
   const [activeMethod, setActiveMethod] = (0, import_react9.useState)("sol");
-  const { publicApiKey } = (0, import_react9.useContext)(CheckoutContext);
-  console.log(intentData);
-  const { data } = (0, import_react_query3.useQuery)(
-    ["intentMetadata"],
-    () => __async(void 0, null, function* () {
-      return yield getIntent(publicApiKey, intentData.sessionId);
-    }),
-    {
-      enabled: !!publicApiKey && !!intentData.sessionId
-    }
-  );
   const methods = (0, import_react9.useMemo)(() => {
     const defaultMethods = ["sol", "usdc"];
     if (!metadata.tokens) {
@@ -465,19 +470,8 @@ var PayModal = ({
     return [...defaultMethods, ...metadata.tokens.tokens];
   }, [metadata.tokens]);
   const amountToShow = (0, import_react9.useMemo)(() => {
-    var _a;
-    if (activeMethod === "usdc") {
-      return metadata.amount;
-    }
-    const amount = (_a = data == null ? void 0 : data.prices.find(
-      (price) => price.token === activeMethod
-    )) == null ? void 0 : _a.price;
-    if (Number((metadata.amount / amount).toFixed(3)) === 0) {
-      return 1e-3;
-    } else {
-      return Number((metadata.amount / amount).toFixed(3));
-    }
-  }, [metadata.amount, activeMethod, data]);
+    return resolveAmount(activeMethod, prices, metadata.amount);
+  }, [metadata.amount, activeMethod, prices]);
   return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
     import_react8.Modal,
     {
@@ -490,7 +484,7 @@ var PayModal = ({
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react8.ModalOverlay, {}),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalContent, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalHeader, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.Text, { fontWeight: "medium", fontSize: "lg", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.Text, { fontWeight: "bold", fontSize: "lg", children: [
               "Pay $",
               metadata == null ? void 0 : metadata.amount
             ] }),
@@ -554,7 +548,8 @@ var PayElement = ({
   const [metadata, setMetadata] = (0, import_react11.useState)(
     {}
   );
-  const [prices, setPrices] = (0, import_react11.useState)();
+  const [prices, setPrices] = (0, import_react11.useState)([]);
+  const { publicApiKey } = (0, import_react11.useContext)(CheckoutContext);
   (0, import_react11.useEffect)(() => {
     if (theme == null ? void 0 : theme.primaryColor) {
       setColors(__spreadProps(__spreadValues({}, colors), {
@@ -567,7 +562,7 @@ var PayElement = ({
       }));
     }
   }, [colors, setColors, theme]);
-  const { mutate, isLoading } = (0, import_react_query4.useMutation)(
+  const { mutate, isLoading } = (0, import_react_query3.useMutation)(
     ["generateIntent"],
     () => __async(void 0, null, function* () {
       const res = yield intentHandler();
@@ -576,6 +571,8 @@ var PayElement = ({
         intentSecret: res.intent_secret_key,
         sessionId: res.session_id
       });
+      const response = yield getIntent(publicApiKey, res.session_id);
+      setPrices(response.prices);
     }),
     {
       onSuccess: () => {
@@ -590,7 +587,7 @@ var PayElement = ({
         isOpen,
         onClose,
         intentData
-      }, { onSuccess, onError, metadata })
+      }, { onSuccess, onError, metadata, prices })
     ),
     publicKey ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
       import_react10.Button,

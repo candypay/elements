@@ -1,6 +1,5 @@
-import { CheckoutContext } from "@/providers/Checkout";
 import { IIntent, TTokens } from "@/typings";
-import { getIntent } from "@/utils/getIntent";
+import { resolveAmount } from "@/utils/resolveAmount";
 import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";
 import {
   Modal,
@@ -11,8 +10,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
-import { FC, useContext, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { PayButton } from "../buttons/pay";
 import { Methods } from "../elements/methods";
 
@@ -23,6 +21,7 @@ interface IProps {
   onSuccess?: Function;
   onError?: Function;
   metadata: SessionMetadataResponse;
+  prices: PricesEntity[];
 }
 
 const PayModal: FC<IProps> = ({
@@ -32,20 +31,9 @@ const PayModal: FC<IProps> = ({
   onError,
   onSuccess,
   metadata,
+  prices,
 }) => {
   const [activeMethod, setActiveMethod] = useState<TTokens>("sol");
-  const { publicApiKey } = useContext(CheckoutContext);
-  console.log(intentData);
-
-  const { data } = useQuery(
-    ["intentMetadata"],
-    async () => {
-      return await getIntent(publicApiKey, intentData.sessionId);
-    },
-    {
-      enabled: !!publicApiKey && !!intentData.sessionId,
-    }
-  );
 
   const methods = useMemo(() => {
     const defaultMethods = ["sol", "usdc"] as TTokens[];
@@ -58,19 +46,8 @@ const PayModal: FC<IProps> = ({
   }, [metadata.tokens]);
 
   const amountToShow = useMemo(() => {
-    if (activeMethod === "usdc") {
-      return metadata.amount;
-    }
-    const amount = data?.prices.find(
-      (price: PricesEntity) => price.token === activeMethod
-    )?.price;
-
-    if (Number((metadata.amount / amount!).toFixed(3)) === 0.0) {
-      return 0.001;
-    } else {
-      return Number((metadata.amount / amount!).toFixed(3));
-    }
-  }, [metadata.amount, activeMethod, data]);
+    return resolveAmount(activeMethod, prices, metadata.amount);
+  }, [metadata.amount, activeMethod, prices]);
 
   return (
     <Modal
@@ -83,7 +60,7 @@ const PayModal: FC<IProps> = ({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <Text fontWeight="medium" fontSize="lg">
+          <Text fontWeight="bold" fontSize="lg">
             Pay ${metadata?.amount}
           </Text>
           <ModalCloseButton />

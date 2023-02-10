@@ -1,10 +1,12 @@
 import { useTheme } from "@/lib/hooks/useTheme";
 import { IIntent, IProps } from "@/typings";
+import { getIntent } from "@/utils/getIntent";
 import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useMutation } from "@tanstack/react-query";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
+import { CheckoutContext } from "..";
 import { ConnectWallet } from "./buttons/wallet";
 import { PayModal } from "./modals/pay";
 
@@ -24,7 +26,8 @@ const PayElement: FC<IProps> = ({
   const [metadata, setMetadata] = useState<SessionMetadataResponse>(
     {} as SessionMetadataResponse
   );
-  const [prices, setPrices] = useState<PricesEntity>();
+  const [prices, setPrices] = useState<PricesEntity[]>([] as PricesEntity[]);
+  const { publicApiKey } = useContext(CheckoutContext);
 
   useEffect(() => {
     if (theme?.primaryColor) {
@@ -50,6 +53,9 @@ const PayElement: FC<IProps> = ({
         intentSecret: res.intent_secret_key,
         sessionId: res.session_id,
       });
+
+      const response = await getIntent(publicApiKey, res.session_id);
+      setPrices(response.prices);
     },
     {
       onSuccess: () => {
@@ -64,7 +70,7 @@ const PayElement: FC<IProps> = ({
         isOpen={isOpen}
         onClose={onClose}
         intentData={intentData}
-        {...{ onSuccess, onError, metadata }}
+        {...{ onSuccess, onError, metadata, prices }}
       />
       {publicKey ? (
         <Button

@@ -1,4 +1,4 @@
-import { SessionMetadataResponse } from '@candypay/checkout-sdk';
+import { SessionMetadataResponse, PricesEntity } from '@candypay/checkout-sdk';
 import { IIntent } from '../../typings/intent.js';
 import { FC } from 'react';
 
@@ -9,6 +9,7 @@ interface IProps {
     onSuccess?: Function;
     onError?: Function;
     metadata: SessionMetadataResponse;
+    prices: PricesEntity[];
 }
 declare const PayModal: FC<IProps>;
 
