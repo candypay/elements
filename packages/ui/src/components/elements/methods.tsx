@@ -1,14 +1,12 @@
+import { IMethods } from "@/typings";
 import { Flex, Grid, Text } from "@chakra-ui/react";
 import { FC } from "react";
-import { IMethods, TTokens } from "@/typings";
 import { MethodButton } from "../buttons/method";
 
-const Methods: FC<IMethods> = ({ activeMethod, setActiveMethod }) => {
-  const methods: TTokens[] = ["sol", "usdc", "shdw", "dust"];
-
+const Methods: FC<IMethods> = ({ activeMethod, setActiveMethod, methods }) => {
   return (
-    <Flex direction="column" gap="4" w="full" alignItems="center">
-      <Text fontSize="md" fontWeight="500" color="#697386">
+    <Flex direction="column" gap="3" w="full">
+      <Text fontSize="md" fontWeight="500" color="#697386" textAlign="left">
         Choose a Token
       </Text>
 

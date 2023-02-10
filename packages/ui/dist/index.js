@@ -127,7 +127,7 @@ var useTheme = () => {
 // src/components/Pay.tsx
 var import_react10 = require("@chakra-ui/react");
 var import_wallet_adapter_react3 = require("@solana/wallet-adapter-react");
-var import_react_query3 = require("@tanstack/react-query");
+var import_react_query4 = require("@tanstack/react-query");
 var import_react11 = require("react");
 
 // src/components/buttons/wallet.tsx
@@ -166,10 +166,6 @@ var ConnectWallet = () => {
     }
   );
 };
-
-// src/components/modals/pay.tsx
-var import_react8 = require("@chakra-ui/react");
-var import_react9 = require("react");
 
 // src/lib/index.ts
 var import_web32 = require("@solana/web3.js");
@@ -241,9 +237,28 @@ var DEV_API_URL = "https://checkout-dev-api.candypay.fun";
 // src/lib/index.ts
 var reference = import_web32.Keypair.generate();
 
+// src/utils/getIntent.ts
+var import_axios = __toESM(require("axios"));
+var getIntent = (publicApiKey, sessionId) => __async(void 0, null, function* () {
+  const { data } = yield import_axios.default.get(`${DEV_API_URL}/api/v1/intent`, {
+    headers: {
+      Authorization: `Bearer ${publicApiKey}`
+    },
+    params: {
+      session_id: sessionId
+    }
+  });
+  return data;
+});
+
+// src/components/modals/pay.tsx
+var import_react8 = require("@chakra-ui/react");
+var import_react_query3 = require("@tanstack/react-query");
+var import_react9 = require("react");
+
 // src/utils/sendTxn.ts
 var import_web33 = require("@solana/web3.js");
-var import_axios = __toESM(require("axios"));
+var import_axios2 = __toESM(require("axios"));
 var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null, function* () {
   try {
     const fee = 0.01;
@@ -262,7 +277,7 @@ var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null,
         nft_discounts: void 0
       }
     };
-    const { data } = yield import_axios.default.request(options);
+    const { data } = yield import_axios2.default.request(options);
     return import_web33.Transaction.from(Buffer.from(data.transaction, "base64"));
   } catch (error) {
     return null;
@@ -270,7 +285,7 @@ var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null,
 });
 
 // src/utils/updateTxn.ts
-var import_axios2 = __toESM(require("axios"));
+var import_axios3 = __toESM(require("axios"));
 var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, null, function* () {
   const options = {
     method: "PATCH",
@@ -285,7 +300,7 @@ var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, nu
     }
   };
   try {
-    const res = yield (0, import_axios2.default)(options);
+    const res = yield (0, import_axios3.default)(options);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -304,7 +319,8 @@ var PayButton = ({
   merchant,
   onClose,
   onSuccess,
-  onError
+  onError,
+  amountToShow
 }) => {
   const { publicKey, sendTransaction } = (0, import_wallet_adapter_react2.useWallet)();
   const { connection } = (0, import_wallet_adapter_react2.useConnection)();
@@ -330,7 +346,7 @@ var PayButton = ({
       onError && onError(error);
     }
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, { children: amount ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, { children: amountToShow ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
     import_react5.Button,
     {
       px: "16",
@@ -346,7 +362,12 @@ var PayButton = ({
       onClick: () => mutate(),
       isLoading,
       isDisabled: !amount,
-      children: "Pay with CandyPay"
+      children: [
+        "Pay ",
+        amountToShow,
+        " ",
+        method.toUpperCase()
+      ]
     }
   ) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react5.Skeleton, { w: "full", h: "10", rounded: "md" }) });
 };
@@ -410,10 +431,9 @@ var MethodButton = ({
 
 // src/components/elements/methods.tsx
 var import_jsx_runtime6 = require("react/jsx-runtime");
-var Methods = ({ activeMethod, setActiveMethod }) => {
-  const methods = ["sol", "usdc", "shdw", "dust"];
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react7.Flex, { direction: "column", gap: "4", w: "full", alignItems: "center", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react7.Text, { fontSize: "md", fontWeight: "500", color: "#697386", children: "Choose a Token" }),
+var Methods = ({ activeMethod, setActiveMethod, methods }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react7.Flex, { direction: "column", gap: "3", w: "full", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react7.Text, { fontSize: "md", fontWeight: "500", color: "#697386", textAlign: "left", children: "Choose a Token" }),
     /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
       import_react7.Grid,
       {
@@ -451,45 +471,94 @@ var PayModal = ({
   metadata
 }) => {
   const [activeMethod, setActiveMethod] = (0, import_react9.useState)("sol");
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.Modal, { isOpen, onClose, isCentered: true, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react8.ModalOverlay, {}),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalContent, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react8.ModalCloseButton, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
-        import_react8.ModalBody,
-        {
-          display: "flex",
-          flexDirection: "column",
-          gap: "4",
-          alignItems: "center",
-          mb: "4",
-          mt: "2",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              Methods,
-              {
-                activeMethod,
-                setActiveMethod
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
-              PayButton,
-              __spreadValues({
-                method: activeMethod,
-                amount: metadata == null ? void 0 : metadata.amount,
-                intentData,
-                merchant: metadata == null ? void 0 : metadata.merchant,
-                onClose
-              }, {
-                onSuccess,
-                onError
-              })
-            )
-          ]
-        }
-      )
-    ] })
-  ] });
+  const { publicApiKey } = (0, import_react9.useContext)(CheckoutContext);
+  console.log(intentData);
+  const { data } = (0, import_react_query3.useQuery)(
+    ["intentMetadata"],
+    () => __async(void 0, null, function* () {
+      return yield getIntent(publicApiKey, intentData.sessionId);
+    }),
+    {
+      enabled: !!publicApiKey && !!intentData.sessionId
+    }
+  );
+  const methods = (0, import_react9.useMemo)(() => {
+    const defaultMethods = ["sol", "usdc"];
+    if (!metadata.tokens) {
+      return defaultMethods;
+    }
+    return [...defaultMethods, ...metadata.tokens.tokens];
+  }, [metadata.tokens]);
+  const amountToShow = (0, import_react9.useMemo)(() => {
+    var _a;
+    if (activeMethod === "usdc") {
+      return metadata.amount;
+    }
+    const amount = (_a = data == null ? void 0 : data.prices.find(
+      (price) => price.token === activeMethod
+    )) == null ? void 0 : _a.price;
+    if (Number((metadata.amount / amount).toFixed(3)) === 0) {
+      return 1e-3;
+    } else {
+      return Number((metadata.amount / amount).toFixed(3));
+    }
+  }, [metadata.amount, activeMethod, data]);
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+    import_react8.Modal,
+    {
+      isOpen,
+      onClose,
+      isCentered: true,
+      closeOnEsc: false,
+      closeOnOverlayClick: false,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react8.ModalOverlay, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalContent, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalHeader, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.Text, { fontWeight: "medium", fontSize: "lg", children: [
+              "Pay $",
+              metadata == null ? void 0 : metadata.amount
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react8.ModalCloseButton, {})
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(
+            import_react8.ModalBody,
+            {
+              display: "flex",
+              flexDirection: "column",
+              gap: "4",
+              alignItems: "center",
+              mb: "4",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+                  Methods,
+                  {
+                    activeMethod,
+                    setActiveMethod,
+                    methods
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+                  PayButton,
+                  __spreadValues({
+                    method: activeMethod,
+                    amount: metadata == null ? void 0 : metadata.amount,
+                    intentData,
+                    merchant: metadata == null ? void 0 : metadata.merchant,
+                    onClose
+                  }, {
+                    onSuccess,
+                    onError,
+                    amountToShow
+                  })
+                )
+              ]
+            }
+          )
+        ] })
+      ]
+    }
+  );
 };
 
 // src/components/Pay.tsx
@@ -507,7 +576,10 @@ var PayElement = ({
     sessionId: ""
   });
   const { colors, setColors } = useTheme();
-  const [metadata, setMetadata] = (0, import_react11.useState)();
+  const [metadata, setMetadata] = (0, import_react11.useState)(
+    {}
+  );
+  const [prices, setPrices] = (0, import_react11.useState)();
   (0, import_react11.useEffect)(() => {
     if (theme == null ? void 0 : theme.primaryColor) {
       setColors(__spreadProps(__spreadValues({}, colors), {
@@ -520,7 +592,7 @@ var PayElement = ({
       }));
     }
   }, [colors, setColors, theme]);
-  const { mutate, isLoading } = (0, import_react_query3.useMutation)(
+  const { mutate, isLoading } = (0, import_react_query4.useMutation)(
     ["generateIntent"],
     () => __async(void 0, null, function* () {
       const res = yield intentHandler();

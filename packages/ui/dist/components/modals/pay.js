@@ -66,21 +66,31 @@ __export(pay_exports, {
   PayModal: () => PayModal
 });
 module.exports = __toCommonJS(pay_exports);
-var import_react5 = require("@chakra-ui/react");
-var import_react6 = require("react");
 
-// src/lib/hooks/useTheme.ts
+// src/providers/Checkout.tsx
+var import_react2 = require("@chakra-ui/react");
+var import_react_query = require("@tanstack/react-query");
+var import_react3 = require("react");
+
+// src/providers/Wallet.tsx
+var import_wallet_adapter_base = require("@solana/wallet-adapter-base");
+var import_wallet_adapter_glow = require("@solana/wallet-adapter-glow");
+var import_wallet_adapter_phantom = require("@solana/wallet-adapter-phantom");
+var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
+var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
+var import_wallet_adapter_solflare = require("@solana/wallet-adapter-solflare");
+var import_web3 = require("@solana/web3.js");
 var import_react = require("react");
-var useTheme = () => {
-  const [colors, setColors] = (0, import_react.useState)({
-    primary: "#8B55FF",
-    secondary: "#FFFFFF"
-  });
-  return { colors, setColors };
-};
+var import_jsx_runtime = require("react/jsx-runtime");
+import("@solana/wallet-adapter-react-ui/styles.css");
+
+// src/providers/Checkout.tsx
+var import_jsx_runtime2 = require("react/jsx-runtime");
+var CheckoutContext = (0, import_react3.createContext)({});
+var queryClient = new import_react_query.QueryClient();
 
 // src/lib/index.ts
-var import_web3 = require("@solana/web3.js");
+var import_web32 = require("@solana/web3.js");
 
 // src/lib/constants/tokens.ts
 var MainnetTokens = /* @__PURE__ */ ((MainnetTokens4) => {
@@ -147,11 +157,40 @@ var PAY_API_URL = "https://pay.candypay.fun";
 var DEV_API_URL = "https://checkout-dev-api.candypay.fun";
 
 // src/lib/index.ts
-var reference = import_web3.Keypair.generate();
+var reference = import_web32.Keypair.generate();
+
+// src/utils/getIntent.ts
+var import_axios = __toESM(require("axios"));
+var getIntent = (publicApiKey, sessionId) => __async(void 0, null, function* () {
+  const { data } = yield import_axios.default.get(`${DEV_API_URL}/api/v1/intent`, {
+    headers: {
+      Authorization: `Bearer ${publicApiKey}`
+    },
+    params: {
+      session_id: sessionId
+    }
+  });
+  return data;
+});
+
+// src/components/modals/pay.tsx
+var import_react8 = require("@chakra-ui/react");
+var import_react_query3 = require("@tanstack/react-query");
+var import_react9 = require("react");
+
+// src/lib/hooks/useTheme.ts
+var import_react4 = require("react");
+var useTheme = () => {
+  const [colors, setColors] = (0, import_react4.useState)({
+    primary: "#8B55FF",
+    secondary: "#FFFFFF"
+  });
+  return { colors, setColors };
+};
 
 // src/utils/sendTxn.ts
-var import_web32 = require("@solana/web3.js");
-var import_axios = __toESM(require("axios"));
+var import_web33 = require("@solana/web3.js");
+var import_axios2 = __toESM(require("axios"));
 var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null, function* () {
   try {
     const fee = 0.01;
@@ -170,15 +209,15 @@ var generateTxn = (method, merchant, amount, publicKey) => __async(void 0, null,
         nft_discounts: void 0
       }
     };
-    const { data } = yield import_axios.default.request(options);
-    return import_web32.Transaction.from(Buffer.from(data.transaction, "base64"));
+    const { data } = yield import_axios2.default.request(options);
+    return import_web33.Transaction.from(Buffer.from(data.transaction, "base64"));
   } catch (error) {
     return null;
   }
 });
 
 // src/utils/updateTxn.ts
-var import_axios2 = __toESM(require("axios"));
+var import_axios3 = __toESM(require("axios"));
 var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, null, function* () {
   const options = {
     method: "PATCH",
@@ -193,7 +232,7 @@ var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, nu
     }
   };
   try {
-    const res = yield (0, import_axios2.default)(options);
+    const res = yield (0, import_axios3.default)(options);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -201,10 +240,10 @@ var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, nu
 });
 
 // src/components/buttons/pay.tsx
-var import_react2 = require("@chakra-ui/react");
-var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
-var import_react_query = require("@tanstack/react-query");
-var import_jsx_runtime = require("react/jsx-runtime");
+var import_react5 = require("@chakra-ui/react");
+var import_wallet_adapter_react2 = require("@solana/wallet-adapter-react");
+var import_react_query2 = require("@tanstack/react-query");
+var import_jsx_runtime3 = require("react/jsx-runtime");
 var PayButton = ({
   method,
   amount,
@@ -212,12 +251,13 @@ var PayButton = ({
   merchant,
   onClose,
   onSuccess,
-  onError
+  onError,
+  amountToShow
 }) => {
-  const { publicKey, sendTransaction } = (0, import_wallet_adapter_react.useWallet)();
-  const { connection } = (0, import_wallet_adapter_react.useConnection)();
+  const { publicKey, sendTransaction } = (0, import_wallet_adapter_react2.useWallet)();
+  const { connection } = (0, import_wallet_adapter_react2.useConnection)();
   const { colors } = useTheme();
-  const { mutate, isLoading } = (0, import_react_query.useMutation)({
+  const { mutate, isLoading } = (0, import_react_query2.useMutation)({
     mutationFn: () => __async(void 0, null, function* () {
       const txn = yield generateTxn(method, merchant, amount, publicKey);
       const signature = yield sendTransaction(txn, connection);
@@ -238,8 +278,8 @@ var PayButton = ({
       onError && onError(error);
     }
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: amount ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    import_react2.Button,
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: amountToShow ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(
+    import_react5.Button,
     {
       px: "16",
       w: "full",
@@ -254,17 +294,22 @@ var PayButton = ({
       onClick: () => mutate(),
       isLoading,
       isDisabled: !amount,
-      children: "Pay with CandyPay"
+      children: [
+        "Pay ",
+        amountToShow,
+        " ",
+        method.toUpperCase()
+      ]
     }
-  ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react2.Skeleton, { w: "full", h: "10", rounded: "md" }) });
+  ) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react5.Skeleton, { w: "full", h: "10", rounded: "md" }) });
 };
 
 // src/components/elements/methods.tsx
-var import_react4 = require("@chakra-ui/react");
+var import_react7 = require("@chakra-ui/react");
 
 // src/components/buttons/method.tsx
-var import_react3 = require("@chakra-ui/react");
-var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_react6 = require("@chakra-ui/react");
+var import_jsx_runtime4 = require("react/jsx-runtime");
 var btnStyles = {
   variant: "outline",
   fontSize: "md",
@@ -286,15 +331,15 @@ var MethodButton = ({
   setActiveMethod,
   method
 }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
-    import_react3.Button,
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+    import_react6.Button,
     __spreadProps(__spreadValues({}, btnStyles), {
       flexDirection: "column",
       borderColor: activeMethod === method ? "purple.500" : "blackAlpha.200",
       onClick: () => setActiveMethod(method),
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-          import_react3.Image,
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+          import_react6.Image,
           {
             src: MAINNET_TOKENS[method.toUpperCase()].image,
             height: "5",
@@ -302,8 +347,8 @@ var MethodButton = ({
             alt: "dust"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-          import_react3.Text,
+        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+          import_react6.Text,
           {
             fontWeight: "500",
             color: activeMethod === method ? "#0570DE" : " #727F95",
@@ -317,13 +362,12 @@ var MethodButton = ({
 };
 
 // src/components/elements/methods.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
-var Methods = ({ activeMethod, setActiveMethod }) => {
-  const methods = ["sol", "usdc", "shdw", "dust"];
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_react4.Flex, { direction: "column", gap: "4", w: "full", alignItems: "center", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react4.Text, { fontSize: "md", fontWeight: "500", color: "#697386", children: "Choose a Token" }),
-    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-      import_react4.Grid,
+var import_jsx_runtime5 = require("react/jsx-runtime");
+var Methods = ({ activeMethod, setActiveMethod, methods }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_react7.Flex, { direction: "column", gap: "3", w: "full", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_react7.Text, { fontSize: "md", fontWeight: "500", color: "#697386", textAlign: "left", children: "Choose a Token" }),
+    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+      import_react7.Grid,
       {
         gap: "1",
         templateColumns: {
@@ -334,7 +378,7 @@ var Methods = ({ activeMethod, setActiveMethod }) => {
         w: "full",
         alignItems: "center",
         justifyContent: "center",
-        children: methods.map((method) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        children: methods.map((method) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
           MethodButton,
           {
             activeMethod,
@@ -349,7 +393,7 @@ var Methods = ({ activeMethod, setActiveMethod }) => {
 };
 
 // src/components/modals/pay.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
+var import_jsx_runtime6 = require("react/jsx-runtime");
 var PayModal = ({
   isOpen,
   onClose,
@@ -358,46 +402,95 @@ var PayModal = ({
   onSuccess,
   metadata
 }) => {
-  const [activeMethod, setActiveMethod] = (0, import_react6.useState)("sol");
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_react5.Modal, { isOpen, onClose, isCentered: true, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react5.ModalOverlay, {}),
-    /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_react5.ModalContent, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react5.ModalCloseButton, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
-        import_react5.ModalBody,
-        {
-          display: "flex",
-          flexDirection: "column",
-          gap: "4",
-          alignItems: "center",
-          mb: "4",
-          mt: "2",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-              Methods,
-              {
-                activeMethod,
-                setActiveMethod
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
-              PayButton,
-              __spreadValues({
-                method: activeMethod,
-                amount: metadata == null ? void 0 : metadata.amount,
-                intentData,
-                merchant: metadata == null ? void 0 : metadata.merchant,
-                onClose
-              }, {
-                onSuccess,
-                onError
-              })
-            )
-          ]
-        }
-      )
-    ] })
-  ] });
+  const [activeMethod, setActiveMethod] = (0, import_react9.useState)("sol");
+  const { publicApiKey } = (0, import_react9.useContext)(CheckoutContext);
+  console.log(intentData);
+  const { data } = (0, import_react_query3.useQuery)(
+    ["intentMetadata"],
+    () => __async(void 0, null, function* () {
+      return yield getIntent(publicApiKey, intentData.sessionId);
+    }),
+    {
+      enabled: !!publicApiKey && !!intentData.sessionId
+    }
+  );
+  const methods = (0, import_react9.useMemo)(() => {
+    const defaultMethods = ["sol", "usdc"];
+    if (!metadata.tokens) {
+      return defaultMethods;
+    }
+    return [...defaultMethods, ...metadata.tokens.tokens];
+  }, [metadata.tokens]);
+  const amountToShow = (0, import_react9.useMemo)(() => {
+    var _a;
+    if (activeMethod === "usdc") {
+      return metadata.amount;
+    }
+    const amount = (_a = data == null ? void 0 : data.prices.find(
+      (price) => price.token === activeMethod
+    )) == null ? void 0 : _a.price;
+    if (Number((metadata.amount / amount).toFixed(3)) === 0) {
+      return 1e-3;
+    } else {
+      return Number((metadata.amount / amount).toFixed(3));
+    }
+  }, [metadata.amount, activeMethod, data]);
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+    import_react8.Modal,
+    {
+      isOpen,
+      onClose,
+      isCentered: true,
+      closeOnEsc: false,
+      closeOnOverlayClick: false,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react8.ModalOverlay, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react8.ModalContent, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react8.ModalHeader, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react8.Text, { fontWeight: "medium", fontSize: "lg", children: [
+              "Pay $",
+              metadata == null ? void 0 : metadata.amount
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react8.ModalCloseButton, {})
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+            import_react8.ModalBody,
+            {
+              display: "flex",
+              flexDirection: "column",
+              gap: "4",
+              alignItems: "center",
+              mb: "4",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                  Methods,
+                  {
+                    activeMethod,
+                    setActiveMethod,
+                    methods
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+                  PayButton,
+                  __spreadValues({
+                    method: activeMethod,
+                    amount: metadata == null ? void 0 : metadata.amount,
+                    intentData,
+                    merchant: metadata == null ? void 0 : metadata.merchant,
+                    onClose
+                  }, {
+                    onSuccess,
+                    onError,
+                    amountToShow
+                  })
+                )
+              ]
+            }
+          )
+        ] })
+      ]
+    }
+  );
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

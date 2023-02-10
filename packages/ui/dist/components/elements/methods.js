@@ -164,10 +164,9 @@ var MethodButton = ({
 
 // src/components/elements/methods.tsx
 var import_jsx_runtime2 = require("react/jsx-runtime");
-var Methods = ({ activeMethod, setActiveMethod }) => {
-  const methods = ["sol", "usdc", "shdw", "dust"];
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_react2.Flex, { direction: "column", gap: "4", w: "full", alignItems: "center", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react2.Text, { fontSize: "md", fontWeight: "500", color: "#697386", children: "Choose a Token" }),
+var Methods = ({ activeMethod, setActiveMethod, methods }) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_react2.Flex, { direction: "column", gap: "3", w: "full", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react2.Text, { fontSize: "md", fontWeight: "500", color: "#697386", textAlign: "left", children: "Choose a Token" }),
     /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
       import_react2.Grid,
       {

@@ -12,6 +12,7 @@ interface IProps {
     onClose: () => void;
     onSuccess?: any;
     onError?: any;
+    amountToShow: number;
 }
 declare const PayButton: FC<IProps>;
 

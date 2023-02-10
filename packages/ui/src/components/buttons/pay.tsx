@@ -15,6 +15,7 @@ interface IProps {
   onClose: () => void;
   onSuccess?: any;
   onError?: any;
+  amountToShow: number;
 }
 
 const PayButton: FC<IProps> = ({
@@ -25,6 +26,7 @@ const PayButton: FC<IProps> = ({
   onClose,
   onSuccess,
   onError,
+  amountToShow,
 }) => {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
@@ -56,7 +58,7 @@ const PayButton: FC<IProps> = ({
 
   return (
     <>
-      {amount ? (
+      {amountToShow ? (
         <Button
           px="16"
           w="full"
@@ -72,7 +74,7 @@ const PayButton: FC<IProps> = ({
           isLoading={isLoading}
           isDisabled={!amount}
         >
-          Pay with CandyPay
+          Pay {amountToShow} {method.toUpperCase()}
         </Button>
       ) : (
         <Skeleton w="full" h="10" rounded="md" />

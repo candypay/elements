@@ -21,6 +21,7 @@ type TTokens = "sol" | "usdc" | "shdw" | "dust";
 interface IMethods {
     activeMethod: TTokens;
     setActiveMethod: (method: TTokens) => void;
+    methods: TTokens[];
 }
 interface IMethodProps {
     activeMethod: TTokens;

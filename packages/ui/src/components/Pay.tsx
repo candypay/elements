@@ -1,5 +1,6 @@
 import { useTheme } from "@/lib/hooks/useTheme";
 import { IIntent, IProps } from "@/typings";
+import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useMutation } from "@tanstack/react-query";
@@ -20,7 +21,10 @@ const PayElement: FC<IProps> = ({
     sessionId: "",
   } as IIntent);
   const { colors, setColors } = useTheme();
-  const [metadata, setMetadata] = useState<any>();
+  const [metadata, setMetadata] = useState<SessionMetadataResponse>(
+    {} as SessionMetadataResponse
+  );
+  const [prices, setPrices] = useState<PricesEntity>();
 
   useEffect(() => {
     if (theme?.primaryColor) {
@@ -41,7 +45,7 @@ const PayElement: FC<IProps> = ({
     ["generateIntent"],
     async () => {
       const res = await intentHandler();
-      setMetadata(res.metadata);
+      setMetadata(res.metadata as SessionMetadataResponse);
       setIntentData({
         intentSecret: res.intent_secret_key,
         sessionId: res.session_id,

@@ -193,7 +193,8 @@ var PayButton = ({
   merchant,
   onClose,
   onSuccess,
-  onError
+  onError,
+  amountToShow
 }) => {
   const { publicKey, sendTransaction } = (0, import_wallet_adapter_react.useWallet)();
   const { connection } = (0, import_wallet_adapter_react.useConnection)();
@@ -219,7 +220,7 @@ var PayButton = ({
       onError && onError(error);
     }
   });
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: amount ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: amountToShow ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
     import_react2.Button,
     {
       px: "16",
@@ -235,7 +236,12 @@ var PayButton = ({
       onClick: () => mutate(),
       isLoading,
       isDisabled: !amount,
-      children: "Pay with CandyPay"
+      children: [
+        "Pay ",
+        amountToShow,
+        " ",
+        method.toUpperCase()
+      ]
     }
   ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react2.Skeleton, { w: "full", h: "10", rounded: "md" }) });
 };
