@@ -1,7 +1,6 @@
 import { CheckoutProvider } from "elements";
 import { AppProps } from "next/app";
 import "../styles/fonts.css";
-import { CandyPayProvider } from "@candypay/react-checkout-sdk";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

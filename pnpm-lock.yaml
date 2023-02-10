@@ -75,7 +75,6 @@ importers:
       '@emotion/styled': ^11.10.5
       '@solana/wallet-adapter-base': ^0.9.20
       '@solana/wallet-adapter-react': ^0.15.28
-      '@solana/wallet-adapter-react-ui': ^0.9.27
       '@solana/wallet-adapter-wallets': ^0.19.11
       '@solana/web3.js': ^1.73.2
       '@tanstack/react-query': ^4.24.4
@@ -100,7 +99,6 @@ importers:
       '@emotion/styled': 11.10.5_5cupl752457ik4y5yv4ybnufju
       '@solana/wallet-adapter-base': 0.9.20_@solana+web3.js@1.73.2
       '@solana/wallet-adapter-react': 0.15.28_@solana+web3.js@1.73.2
-      '@solana/wallet-adapter-react-ui': 0.9.27_@solana+web3.js@1.73.2
       '@solana/wallet-adapter-wallets': 0.19.11_5k57wohrqe3mwdx2dqgt4bsc6e
       '@solana/web3.js': 1.73.2
       '@tanstack/react-query': 4.24.4
@@ -3415,22 +3413,6 @@ packages:
     dependencies:
       '@solana/wallet-adapter-base': 0.9.20_@solana+web3.js@1.73.2
       '@solana/web3.js': 1.73.2
-    dev: false
-
-  /@solana/wallet-adapter-react-ui/0.9.27_@solana+web3.js@1.73.2:
-    resolution: {integrity: sha512-ET3ZdNGS2PzOjRJcB3U6W20oiewRe3j0uvdxBe2WbeyL8dRQtGpaiz13HvoJ218863c+Ayjyz1Yhvm+V8B2A9w==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      '@solana/web3.js': ^1.58.0
-      react: '*'
-      react-dom: '*'
-    dependencies:
-      '@solana/wallet-adapter-base': 0.9.20_@solana+web3.js@1.73.2
-      '@solana/wallet-adapter-react': 0.15.28_@solana+web3.js@1.73.2
-      '@solana/web3.js': 1.73.2
-    transitivePeerDependencies:
-      - bs58
-      - react-native
     dev: false
 
   /@solana/wallet-adapter-react/0.15.28_@solana+web3.js@1.73.2:

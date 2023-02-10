@@ -7,6 +7,7 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
+  Spinner,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { FC, useContext, useState } from "react";
@@ -23,7 +24,7 @@ const PayModal: FC<IProps> = ({ isOpen, onClose, intentData }) => {
   const [activeMethod, setActiveMethod] = useState<TTokens>("sol");
   const { publicApiKey } = useContext(CheckoutContext);
 
-  const { data } = useQuery(
+  const { data, isLoading } = useQuery(
     ["getIntent"],
     async () => {
       return await getIntent(publicApiKey, intentData.sessionId);
@@ -32,6 +33,7 @@ const PayModal: FC<IProps> = ({ isOpen, onClose, intentData }) => {
       enabled: !!publicApiKey && !!intentData.sessionId,
     }
   );
+  console.log(data);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -47,17 +49,23 @@ const PayModal: FC<IProps> = ({ isOpen, onClose, intentData }) => {
           mb="4"
           mt="2"
         >
-          <Methods
-            activeMethod={activeMethod}
-            setActiveMethod={setActiveMethod}
-          />
-          <PayButton
-            method={activeMethod}
-            amount={data?.session?.amount!}
-            intentData={intentData}
-            merchant={data?.session?.merchant}
-            onClose={onClose}
-          />
+          {isLoading ? (
+            <Spinner size="lg" color="purple.500" />
+          ) : (
+            <>
+              <Methods
+                activeMethod={activeMethod}
+                setActiveMethod={setActiveMethod}
+              />
+              <PayButton
+                method={activeMethod}
+                amount={data?.session?.amount!}
+                intentData={intentData}
+                merchant={data?.session?.merchant}
+                onClose={onClose}
+              />
+            </>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>

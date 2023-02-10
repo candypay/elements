@@ -75,12 +75,10 @@ var import_react3 = require("react");
 // src/providers/Wallet.tsx
 var import_wallet_adapter_base = require("@solana/wallet-adapter-base");
 var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
-var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
 var import_wallet_adapter_wallets = require("@solana/wallet-adapter-wallets");
 var import_web3 = require("@solana/web3.js");
 var import_react = require("react");
 var import_jsx_runtime = require("react/jsx-runtime");
-import("@solana/wallet-adapter-react-ui/styles.css");
 
 // src/providers/Checkout.tsx
 var import_jsx_runtime2 = require("react/jsx-runtime");
@@ -377,7 +375,7 @@ var PayModal = ({ isOpen, onClose, intentData }) => {
   var _a, _b;
   const [activeMethod, setActiveMethod] = (0, import_react8.useState)("sol");
   const { publicApiKey } = (0, import_react8.useContext)(CheckoutContext);
-  const { data } = (0, import_react_query3.useQuery)(
+  const { data, isLoading } = (0, import_react_query3.useQuery)(
     ["getIntent"],
     () => __async(void 0, null, function* () {
       return yield getIntent(publicApiKey, intentData.sessionId);
@@ -386,11 +384,12 @@ var PayModal = ({ isOpen, onClose, intentData }) => {
       enabled: !!publicApiKey && !!intentData.sessionId
     }
   );
+  console.log(data);
   return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react7.Modal, { isOpen, onClose, isCentered: true, children: [
     /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react7.ModalOverlay, {}),
     /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react7.ModalContent, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react7.ModalCloseButton, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
         import_react7.ModalBody,
         {
           display: "flex",
@@ -399,7 +398,7 @@ var PayModal = ({ isOpen, onClose, intentData }) => {
           alignItems: "center",
           mb: "4",
           mt: "2",
-          children: [
+          children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_react7.Spinner, { size: "lg", color: "purple.500" }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_jsx_runtime6.Fragment, { children: [
             /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
               Methods,
               {
@@ -417,7 +416,7 @@ var PayModal = ({ isOpen, onClose, intentData }) => {
                 onClose
               }
             )
-          ]
+          ] })
         }
       )
     ] })
