@@ -3,6 +3,7 @@ import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
+import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import {
   LedgerWalletAdapter,
   SlopeWalletAdapter,
@@ -27,7 +28,9 @@ const ClientWalletProvider: FC<IProps> = ({ children }) => {
   );
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets}>{children}</WalletProvider>
+      <WalletProvider wallets={wallets}>
+        <WalletModalProvider>{children}</WalletModalProvider>
+      </WalletProvider>
     </ConnectionProvider>
   );
 };

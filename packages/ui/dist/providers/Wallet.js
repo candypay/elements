@@ -25,6 +25,7 @@ __export(Wallet_exports, {
 module.exports = __toCommonJS(Wallet_exports);
 var import_wallet_adapter_base = require("@solana/wallet-adapter-base");
 var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
+var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
 var import_wallet_adapter_wallets = require("@solana/wallet-adapter-wallets");
 var import_web3 = require("@solana/web3.js");
 var import_react = require("react");
@@ -39,7 +40,7 @@ var ClientWalletProvider = ({ children }) => {
     ],
     []
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_wallet_adapter_react.ConnectionProvider, { endpoint, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_wallet_adapter_react.WalletProvider, { wallets, children }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_wallet_adapter_react.ConnectionProvider, { endpoint, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_wallet_adapter_react.WalletProvider, { wallets, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_wallet_adapter_react_ui.WalletModalProvider, { children }) }) });
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

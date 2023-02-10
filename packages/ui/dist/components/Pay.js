@@ -172,6 +172,7 @@ var import_react6 = require("react");
 // src/providers/Wallet.tsx
 var import_wallet_adapter_base = require("@solana/wallet-adapter-base");
 var import_wallet_adapter_react3 = require("@solana/wallet-adapter-react");
+var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
 var import_wallet_adapter_wallets = require("@solana/wallet-adapter-wallets");
 var import_web3 = require("@solana/web3.js");
 var import_react4 = require("react");
