@@ -9,6 +9,12 @@ interface IPayProps {
 }
 interface IProps {
     intentHandler: () => Promise<CreateIntentResponse>;
+    onSuccess?: any;
+    onError?: any;
+    theme?: {
+        primaryColor?: string;
+        secondaryColor?: string;
+    };
 }
 
 type TTokens = "sol" | "usdc" | "shdw" | "dust";

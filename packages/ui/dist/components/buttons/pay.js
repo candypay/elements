@@ -50,6 +50,16 @@ __export(pay_exports, {
 });
 module.exports = __toCommonJS(pay_exports);
 
+// src/lib/hooks/useTheme.ts
+var import_react = require("react");
+var useTheme = () => {
+  const [colors, setColors] = (0, import_react.useState)({
+    primary: "#8B55FF",
+    secondary: "#FFFFFF"
+  });
+  return { colors, setColors };
+};
+
 // src/lib/index.ts
 var import_web3 = require("@solana/web3.js");
 
@@ -172,7 +182,7 @@ var updateTxn = (session_id, signature, intent_secret_key) => __async(void 0, nu
 });
 
 // src/components/buttons/pay.tsx
-var import_react = require("@chakra-ui/react");
+var import_react2 = require("@chakra-ui/react");
 var import_wallet_adapter_react = require("@solana/wallet-adapter-react");
 var import_react_query = require("@tanstack/react-query");
 var import_jsx_runtime = require("react/jsx-runtime");
@@ -181,10 +191,13 @@ var PayButton = ({
   amount,
   intentData,
   merchant,
-  onClose
+  onClose,
+  onSuccess,
+  onError
 }) => {
   const { publicKey, sendTransaction } = (0, import_wallet_adapter_react.useWallet)();
   const { connection } = (0, import_wallet_adapter_react.useConnection)();
+  const { colors } = useTheme();
   const { mutate, isLoading } = (0, import_react_query.useMutation)({
     mutationFn: () => __async(void 0, null, function* () {
       const txn = yield generateTxn(method, merchant, amount, publicKey);
@@ -198,22 +211,23 @@ var PayButton = ({
     }),
     onSuccess: (data) => {
       if (!data.error) {
-        console.log("success");
+        onSuccess && onSuccess(data);
         onClose();
       }
     },
     onError: (error) => {
+      onError && onError(error);
     }
   });
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: amount ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    import_react.Button,
+    import_react2.Button,
     {
       px: "16",
       w: "full",
       rounded: "md",
       fontWeight: "medium",
       h: "10",
-      bgColor: "#8B55FF",
+      bgColor: colors.primary,
       color: "white",
       _hover: { bgColor: "#7C4DFF" },
       _active: { bgColor: "#6B45FF" },
@@ -223,7 +237,7 @@ var PayButton = ({
       isDisabled: !amount,
       children: "Pay with CandyPay"
     }
-  ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Skeleton, { w: "full", h: "10", rounded: "md" }) });
+  ) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react2.Skeleton, { w: "full", h: "10", rounded: "md" }) });
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

@@ -10,6 +10,8 @@ interface IProps {
     intentData: IIntent;
     merchant: string;
     onClose: () => void;
+    onSuccess?: any;
+    onError?: any;
 }
 declare const PayButton: FC<IProps>;
 

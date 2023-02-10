@@ -1,3 +1,4 @@
+import { useTheme } from "@/lib/hooks/useTheme";
 import { IIntent, TTokens } from "@/typings";
 import { generateTxn } from "@/utils/sendTxn";
 import { updateTxn } from "@/utils/updateTxn";
@@ -12,6 +13,8 @@ interface IProps {
   intentData: IIntent;
   merchant: string;
   onClose: () => void;
+  onSuccess?: any;
+  onError?: any;
 }
 
 const PayButton: FC<IProps> = ({
@@ -20,9 +23,12 @@ const PayButton: FC<IProps> = ({
   intentData,
   merchant,
   onClose,
+  onSuccess,
+  onError,
 }) => {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
+  const { colors } = useTheme();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async () => {
@@ -39,11 +45,13 @@ const PayButton: FC<IProps> = ({
     },
     onSuccess: (data) => {
       if (!data.error) {
-        console.log("success");
+        onSuccess && onSuccess(data);
         onClose();
       }
     },
-    onError: (error) => {},
+    onError: (error) => {
+      onError && onError(error);
+    },
   });
 
   return (
@@ -55,7 +63,7 @@ const PayButton: FC<IProps> = ({
           rounded="md"
           fontWeight="medium"
           h="10"
-          bgColor="#8B55FF"
+          bgColor={colors.primary}
           color="white"
           _hover={{ bgColor: "#7C4DFF" }}
           _active={{ bgColor: "#6B45FF" }}

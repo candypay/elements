@@ -1,16 +1,12 @@
-import { CheckoutContext } from "@/providers/Checkout";
 import { IIntent, TTokens } from "@/typings";
-import { getIntent } from "@/utils/getIntent";
 import {
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  Spinner,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
-import { FC, useContext, useState } from "react";
+import { FC, useState } from "react";
 import { PayButton } from "../buttons/pay";
 import { Methods } from "../elements/methods";
 
@@ -18,21 +14,20 @@ interface IProps {
   isOpen: boolean;
   onClose: () => void;
   intentData: IIntent;
+  onSuccess?: Function;
+  onError?: Function;
+  metadata: any;
 }
 
-const PayModal: FC<IProps> = ({ isOpen, onClose, intentData }) => {
+const PayModal: FC<IProps> = ({
+  isOpen,
+  onClose,
+  intentData,
+  onError,
+  onSuccess,
+  metadata,
+}) => {
   const [activeMethod, setActiveMethod] = useState<TTokens>("sol");
-  const { publicApiKey } = useContext(CheckoutContext);
-
-  const { data, isLoading } = useQuery(
-    ["getIntent"],
-    async () => {
-      return await getIntent(publicApiKey, intentData.sessionId);
-    },
-    {
-      enabled: !!publicApiKey && !!intentData.sessionId,
-    }
-  );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -48,23 +43,21 @@ const PayModal: FC<IProps> = ({ isOpen, onClose, intentData }) => {
           mb="4"
           mt="2"
         >
-          {isLoading ? (
-            <Spinner size="lg" color="purple.500" />
-          ) : (
-            <>
-              <Methods
-                activeMethod={activeMethod}
-                setActiveMethod={setActiveMethod}
-              />
-              <PayButton
-                method={activeMethod}
-                amount={data?.session?.amount!}
-                intentData={intentData}
-                merchant={data?.session?.merchant}
-                onClose={onClose}
-              />
-            </>
-          )}
+          <Methods
+            activeMethod={activeMethod}
+            setActiveMethod={setActiveMethod}
+          />
+          <PayButton
+            method={activeMethod}
+            amount={metadata?.amount!}
+            intentData={intentData}
+            merchant={metadata?.merchant}
+            onClose={onClose}
+            {...{
+              onSuccess,
+              onError,
+            }}
+          />
         </ModalBody>
       </ModalContent>
     </Modal>

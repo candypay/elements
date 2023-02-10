@@ -1,7 +1,9 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -15,6 +17,10 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/components/buttons/wallet.tsx
@@ -23,14 +29,35 @@ __export(wallet_exports, {
   ConnectWallet: () => ConnectWallet
 });
 module.exports = __toCommonJS(wallet_exports);
-var import_wallet_adapter_react_ui = require("@solana/wallet-adapter-react-ui");
+
+// src/lib/hooks/useTheme.ts
+var import_react = require("react");
+var useTheme = () => {
+  const [colors, setColors] = (0, import_react.useState)({
+    primary: "#8B55FF",
+    secondary: "#FFFFFF"
+  });
+  return { colors, setColors };
+};
+
+// src/components/buttons/wallet.tsx
+var import_dynamic = __toESM(require("next/dynamic"));
 var import_jsx_runtime = require("react/jsx-runtime");
+var WalletMultiButton = (0, import_dynamic.default)(
+  () => import("@solana/wallet-adapter-react-ui").then(
+    (mod) => mod.WalletMultiButton
+  ),
+  {
+    ssr: false
+  }
+);
 var ConnectWallet = () => {
+  const { colors } = useTheme();
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
-    import_wallet_adapter_react_ui.WalletMultiButton,
+    WalletMultiButton,
     {
       style: {
-        backgroundColor: "#8B55FF",
+        backgroundColor: colors.primary,
         color: "white",
         borderRadius: "0.375rem",
         padding: "0.3rem 1rem",

@@ -9,6 +9,12 @@ interface IPayProps {
 
 interface IProps {
   intentHandler: () => Promise<CreateIntentResponse>;
+  onSuccess?: any;
+  onError?: any;
+  theme?: {
+    primaryColor?: string;
+    secondaryColor?: string;
+  };
 }
 
 export type { IPayProps, IProps };

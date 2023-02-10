@@ -1,11 +1,24 @@
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useTheme } from "@/lib/hooks/useTheme";
+import dynamic from "next/dynamic";
 import { FC } from "react";
 
+const WalletMultiButton = dynamic(
+  () =>
+    import("@solana/wallet-adapter-react-ui").then(
+      (mod) => mod.WalletMultiButton
+    ),
+  {
+    ssr: false,
+  }
+);
+
 const ConnectWallet: FC = () => {
+  const { colors } = useTheme();
+
   return (
     <WalletMultiButton
       style={{
-        backgroundColor: "#8B55FF",
+        backgroundColor: colors.primary,
         color: "white",
         borderRadius: "0.375rem",
         padding: "0.3rem 1rem",
