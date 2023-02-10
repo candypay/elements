@@ -1,30 +1,27 @@
-import { Button, useDisclosure } from "@chakra-ui/react";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { FC } from "react";
-import { ConnectModal } from "../modals/connect";
 
 const ConnectWallet: FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { publicKey } = useWallet();
-
   return (
-    <>
-      <ConnectModal isOpen={isOpen} onClose={onClose} />
-      <Button
-        px="16"
-        rounded="md"
-        fontWeight="medium"
-        h="10"
-        bgColor="#8B55FF"
-        color="white"
-        _hover={{ bgColor: "#7C4DFF" }}
-        _active={{ bgColor: "#6B45FF" }}
-        transition="all 0.2s ease-in-out"
-        onClick={onOpen}
-      >
-        Connect Wallet
-      </Button>
-    </>
+    <WalletMultiButton
+      style={{
+        backgroundColor: "#8B55FF",
+        color: "white",
+        borderRadius: "0.375rem",
+        padding: "0.3rem 1rem",
+        fontWeight: "regular",
+        fontSize: "0.875rem",
+        transition: "all 0.2s ease-in-out",
+        cursor: "pointer",
+        border: "none",
+        width: "18rem",
+        outline: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "2.5rem",
+      }}
+    />
   );
 };
 

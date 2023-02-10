@@ -33,7 +33,6 @@ const PayModal: FC<IProps> = ({ isOpen, onClose, intentData }) => {
       enabled: !!publicApiKey && !!intentData.sessionId,
     }
   );
-  console.log(data);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>

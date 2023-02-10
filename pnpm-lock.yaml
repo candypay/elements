@@ -74,8 +74,12 @@ importers:
       '@emotion/react': ^11.10.5
       '@emotion/styled': ^11.10.5
       '@solana/wallet-adapter-base': ^0.9.20
+      '@solana/wallet-adapter-glow': ^0.1.15
+      '@solana/wallet-adapter-phantom': ^0.9.20
       '@solana/wallet-adapter-react': ^0.15.28
       '@solana/wallet-adapter-react-ui': ^0.9.27
+      '@solana/wallet-adapter-solflare': ^0.6.22
+      '@solana/wallet-adapter-sollet': ^0.11.14
       '@solana/wallet-adapter-wallets': ^0.19.11
       '@solana/web3.js': ^1.73.2
       '@tanstack/react-query': ^4.24.4
@@ -87,7 +91,6 @@ importers:
       eslint: ^7.32.0
       eslint-config-custom: workspace:*
       framer-motion: ^9.0.1
-      node-fetch: ^3.3.0
       tsconfig: workspace:*
       tsup: ^6.5.0
       typescript: ^4.5.2
@@ -97,15 +100,18 @@ importers:
       '@emotion/react': 11.10.5_@types+react@18.0.27
       '@emotion/styled': 11.10.5_5cupl752457ik4y5yv4ybnufju
       '@solana/wallet-adapter-base': 0.9.20_@solana+web3.js@1.73.2
+      '@solana/wallet-adapter-glow': 0.1.15_@solana+web3.js@1.73.2
+      '@solana/wallet-adapter-phantom': 0.9.20_@solana+web3.js@1.73.2
       '@solana/wallet-adapter-react': 0.15.28_@solana+web3.js@1.73.2
       '@solana/wallet-adapter-react-ui': 0.9.27_@solana+web3.js@1.73.2
+      '@solana/wallet-adapter-solflare': 0.6.22_@solana+web3.js@1.73.2
+      '@solana/wallet-adapter-sollet': 0.11.14_@solana+web3.js@1.73.2
       '@solana/wallet-adapter-wallets': 0.19.11_5k57wohrqe3mwdx2dqgt4bsc6e
       '@solana/web3.js': 1.73.2
       '@tanstack/react-query': 4.24.4
       axios: 1.3.2
       better-sqlite3: 8.0.1
       framer-motion: 9.0.1
-      node-fetch: 3.3.0
     devDependencies:
       '@types/node': 17.0.45
       '@types/react': 18.0.27
@@ -5292,11 +5298,6 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: false
 
-  /data-uri-to-buffer/4.0.1:
-    resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
-    engines: {node: '>= 12'}
-    dev: false
-
   /dateformat/3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
     dev: false
@@ -6277,14 +6278,6 @@ packages:
     dependencies:
       reusify: 1.0.4
 
-  /fetch-blob/3.2.0:
-    resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
-    engines: {node: ^12.20 || >= 14.13}
-    dependencies:
-      node-domexception: 1.0.0
-      web-streams-polyfill: 3.2.1
-    dev: false
-
   /file-entry-cache/6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -6361,13 +6354,6 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-    dev: false
-
-  /formdata-polyfill/4.0.10:
-    resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
-    engines: {node: '>=12.20.0'}
-    dependencies:
-      fetch-blob: 3.2.0
     dev: false
 
   /framer-motion/7.10.3_biqbaboplfbrettd7655fr4n2y:
@@ -7299,11 +7285,6 @@ packages:
     resolution: {integrity: sha512-Ntyt4AIXyaLIuMHF6IOoTakB3K+RWxwtsHNRxllEoA6vPwP9o4866g6YWDLUdnucilZhmkxiHwHr11gAENw+QA==}
     dev: false
 
-  /node-domexception/1.0.0:
-    resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
-    engines: {node: '>=10.5.0'}
-    dev: false
-
   /node-fetch/2.6.9:
     resolution: {integrity: sha512-DJm/CJkZkRjKKj4Zi4BsKVZh3ValV5IR5s7LVZnW+6YMh0W1BfNA8XSs6DLMGYlId5F3KnA70uu2qepcR08Qqg==}
     engines: {node: 4.x || >=6.0.0}
@@ -7314,15 +7295,6 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
-    dev: false
-
-  /node-fetch/3.3.0:
-    resolution: {integrity: sha512-BKwRP/O0UvoMKp7GNdwPlObhYGB5DQqwhEDQlNKuoqwVYSxkSZCSbHjnFFmUEtwSKRPU4kNK8PbDYYitwaE3QA==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    dependencies:
-      data-uri-to-buffer: 4.0.1
-      fetch-blob: 3.2.0
-      formdata-polyfill: 4.0.10
     dev: false
 
   /node-gyp-build/4.6.0:
@@ -8896,11 +8868,6 @@ packages:
     resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
-
-  /web-streams-polyfill/3.2.1:
-    resolution: {integrity: sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==}
-    engines: {node: '>= 8'}
     dev: false
 
   /webidl-conversions/3.0.1:
