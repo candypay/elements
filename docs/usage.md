@@ -10,11 +10,12 @@ npm install @candypay/elements @candypay/checkout-sdk
 
 ## Usage
 
-1. First, wrap your app in the `CheckoutProvider` component:
+1. First, wrap your app in the `CheckoutProvider` component and import the `wallet-adapter-react-ui` styles as shown below:
 
 ```tsx
 import { CheckoutProvider } from "@candypay/elements";
 import { AppProps } from "next/app";
+import("@solana/wallet-adapter-react-ui/styles.css" as any);
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
