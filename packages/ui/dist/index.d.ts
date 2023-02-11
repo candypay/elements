@@ -4,4 +4,5 @@ import 'react';
 import './typings/Context.js';
 import './typings/index.js';
 import '@candypay/checkout-sdk';
+import '@tanstack/react-query';
 import './typings/intent.js';

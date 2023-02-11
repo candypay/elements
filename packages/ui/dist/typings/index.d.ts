@@ -1,5 +1,6 @@
 export { ICheckoutContext } from './Context.js';
 import { CreateIntentResponse, SessionMetadataResponse, PricesEntity } from '@candypay/checkout-sdk';
+import { UseMutateFunction } from '@tanstack/react-query';
 import { IIntent } from './intent.js';
 
 interface IPayProps {
@@ -41,6 +42,13 @@ interface IPay {
     amountToShow: number;
     theme: ITheme;
 }
+interface IRendererProps {
+    mutate: UseMutateFunction;
+    isLoading: boolean;
+    className: string;
+    value?: string;
+    theme?: ITheme;
+}
 
 type TTokens = "sol" | "usdc" | "shdw" | "dust";
 interface IMethods {
@@ -54,4 +62,4 @@ interface IMethodProps {
     method: TTokens;
 }
 
-export { IIntent, IMethodProps, IMethods, IModalProps, IPay, IPayProps, IProps, ITheme, TTokens };
+export { IIntent, IMethodProps, IMethods, IModalProps, IPay, IPayProps, IProps, IRendererProps, ITheme, TTokens };

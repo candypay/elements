@@ -3,6 +3,7 @@ import {
   PricesEntity,
   SessionMetadataResponse,
 } from "@candypay/checkout-sdk";
+import { UseMutateFunction } from "@tanstack/react-query";
 import { IIntent, TTokens } from ".";
 
 interface IPayProps {
@@ -49,4 +50,12 @@ interface IPay {
   theme: ITheme;
 }
 
-export type { IPayProps, IProps, ITheme, IModalProps, IPay };
+interface IRendererProps {
+  mutate: UseMutateFunction;
+  isLoading: boolean;
+  className: string;
+  value?: string;
+  theme?: ITheme;
+}
+
+export type { IPayProps, IProps, ITheme, IModalProps, IPay, IRendererProps };

@@ -2,7 +2,6 @@ import { ICheckoutContext } from "@/typings";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createContext, FC, ReactNode } from "react";
-import { ClientWalletProvider } from "./Wallet";
 
 const CheckoutContext = createContext<ICheckoutContext>({} as ICheckoutContext);
 
@@ -18,11 +17,9 @@ const CheckoutProvider: FC<{
         publicApiKey,
       }}
     >
-      <ClientWalletProvider>
-        <QueryClientProvider client={queryClient}>
-          <ChakraProvider>{children}</ChakraProvider>
-        </QueryClientProvider>
-      </ClientWalletProvider>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider>{children}</ChakraProvider>
+      </QueryClientProvider>
     </CheckoutContext.Provider>
   );
 };
