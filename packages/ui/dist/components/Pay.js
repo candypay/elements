@@ -69,12 +69,20 @@ module.exports = __toCommonJS(Pay_exports);
 
 // src/lib/hooks/useTheme.ts
 var import_react = require("react");
-var useTheme = () => {
-  const [colors, setColors] = (0, import_react.useState)({
-    primary: "#8B55FF",
-    secondary: "#FFFFFF"
-  });
-  return { colors, setColors };
+var useTheme = (theme) => {
+  const cols = (0, import_react.useMemo)(() => {
+    if (!theme)
+      return {
+        primary: "#8B55FF",
+        secondary: "#FFFFFF"
+      };
+    const { primaryColor, secondaryColor } = theme;
+    return {
+      primary: primaryColor,
+      secondary: secondaryColor
+    };
+  }, [theme]);
+  return cols;
 };
 
 // src/lib/index.ts
@@ -200,14 +208,14 @@ var WalletMultiButton = (0, import_dynamic.default)(
     ssr: false
   }
 );
-var ConnectWallet = () => {
-  const { colors } = useTheme();
+var ConnectWallet = ({ theme }) => {
+  const colors = useTheme(theme);
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
     WalletMultiButton,
     {
       style: {
         backgroundColor: colors.primary,
-        color: "white",
+        color: colors.secondary,
         borderRadius: "0.375rem",
         padding: "0.3rem 1rem",
         fontWeight: "regular",
@@ -310,11 +318,12 @@ var PayButton = ({
   onClose,
   onSuccess,
   onError,
-  amountToShow
+  amountToShow,
+  theme
 }) => {
   const { publicKey, sendTransaction } = (0, import_wallet_adapter_react2.useWallet)();
   const { connection } = (0, import_wallet_adapter_react2.useConnection)();
-  const { colors } = useTheme();
+  const cols = useTheme(theme);
   const { mutate, isLoading } = (0, import_react_query2.useMutation)({
     mutationFn: () => __async(void 0, null, function* () {
       const txn = yield generateTxn(method, merchant, amount, publicKey);
@@ -344,8 +353,8 @@ var PayButton = ({
       rounded: "md",
       fontWeight: "medium",
       h: "10",
-      bgColor: colors.primary,
-      color: "white",
+      bgColor: cols.primary,
+      color: cols.secondary,
       _hover: { bgColor: "#7C4DFF" },
       _active: { bgColor: "#6B45FF" },
       transition: "all 0.2s ease-in-out",
@@ -459,7 +468,9 @@ var PayModal = ({
   onError,
   onSuccess,
   metadata,
-  prices
+  avatar,
+  prices,
+  theme
 }) => {
   const [activeMethod, setActiveMethod] = (0, import_react9.useState)("sol");
   const methods = (0, import_react9.useMemo)(() => {
@@ -483,7 +494,8 @@ var PayModal = ({
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react8.ModalOverlay, {}),
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalContent, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalHeader, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.ModalHeader, { display: "flex", alignItems: "center", gap: "2", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_react8.Image, { src: avatar, alt: "avatar", h: "8", w: "8", rounded: "sm" }),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.Text, { fontWeight: "bold", fontSize: "lg", children: [
               "Pay $",
               metadata == null ? void 0 : metadata.amount
@@ -518,7 +530,8 @@ var PayModal = ({
                   }, {
                     onSuccess,
                     onError,
-                    amountToShow
+                    amountToShow,
+                    theme
                   })
                 )
               ]
@@ -536,7 +549,9 @@ var PayElement = ({
   intentHandler,
   onError,
   onSuccess,
-  theme
+  theme,
+  value,
+  className
 }) => {
   const { isOpen, onClose, onOpen } = (0, import_react10.useDisclosure)();
   const { publicKey } = (0, import_wallet_adapter_react3.useWallet)();
@@ -544,24 +559,13 @@ var PayElement = ({
     intentSecret: "",
     sessionId: ""
   });
-  const { colors, setColors } = useTheme();
   const [metadata, setMetadata] = (0, import_react11.useState)(
     {}
   );
   const [prices, setPrices] = (0, import_react11.useState)([]);
+  const [avatar, setAvatar] = (0, import_react11.useState)("");
   const { publicApiKey } = (0, import_react11.useContext)(CheckoutContext);
-  (0, import_react11.useEffect)(() => {
-    if (theme == null ? void 0 : theme.primaryColor) {
-      setColors(__spreadProps(__spreadValues({}, colors), {
-        primary: theme == null ? void 0 : theme.primaryColor
-      }));
-    }
-    if (theme == null ? void 0 : theme.secondaryColor) {
-      setColors(__spreadProps(__spreadValues({}, colors), {
-        secondary: theme == null ? void 0 : theme.secondaryColor
-      }));
-    }
-  }, [colors, setColors, theme]);
+  const cols = useTheme(theme);
   const { mutate, isLoading } = (0, import_react_query3.useMutation)(
     ["generateIntent"],
     () => __async(void 0, null, function* () {
@@ -572,6 +576,7 @@ var PayElement = ({
         sessionId: res.session_id
       });
       const response = yield getIntent(publicApiKey, res.session_id);
+      setAvatar(response.merchant.avatar);
       setPrices(response.prices);
     }),
     {
@@ -583,11 +588,13 @@ var PayElement = ({
   return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
       PayModal,
-      __spreadValues({
+      __spreadProps(__spreadValues({
         isOpen,
         onClose,
         intentData
-      }, { onSuccess, onError, metadata, prices })
+      }, { onSuccess, onError, metadata, prices, avatar }), {
+        theme
+      })
     ),
     publicKey ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
       import_react10.Button,
@@ -596,16 +603,17 @@ var PayElement = ({
         rounded: "md",
         fontWeight: "medium",
         h: "10",
-        bgColor: colors.primary,
-        color: "white",
+        bgColor: cols.primary,
+        color: cols.secondary,
         _hover: { bgColor: "#7C4DFF" },
         _active: { bgColor: "#6B45FF" },
         transition: "all 0.2s ease-in-out",
         onClick: () => mutate(),
         isLoading,
-        children: "Pay with CandyPay"
+        className,
+        children: value || "Pay with CandyPay"
       }
-    ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ConnectWallet, {})
+    ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ConnectWallet, { theme })
   ] });
 };
 // Annotate the CommonJS export names for ESM import in node:

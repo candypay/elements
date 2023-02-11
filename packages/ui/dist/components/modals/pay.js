@@ -89,12 +89,20 @@ var import_react6 = require("react");
 
 // src/lib/hooks/useTheme.ts
 var import_react = require("react");
-var useTheme = () => {
-  const [colors, setColors] = (0, import_react.useState)({
-    primary: "#8B55FF",
-    secondary: "#FFFFFF"
-  });
-  return { colors, setColors };
+var useTheme = (theme) => {
+  const cols = (0, import_react.useMemo)(() => {
+    if (!theme)
+      return {
+        primary: "#8B55FF",
+        secondary: "#FFFFFF"
+      };
+    const { primaryColor, secondaryColor } = theme;
+    return {
+      primary: primaryColor,
+      secondary: secondaryColor
+    };
+  }, [theme]);
+  return cols;
 };
 
 // src/lib/index.ts
@@ -231,11 +239,12 @@ var PayButton = ({
   onClose,
   onSuccess,
   onError,
-  amountToShow
+  amountToShow,
+  theme
 }) => {
   const { publicKey, sendTransaction } = (0, import_wallet_adapter_react.useWallet)();
   const { connection } = (0, import_wallet_adapter_react.useConnection)();
-  const { colors } = useTheme();
+  const cols = useTheme(theme);
   const { mutate, isLoading } = (0, import_react_query.useMutation)({
     mutationFn: () => __async(void 0, null, function* () {
       const txn = yield generateTxn(method, merchant, amount, publicKey);
@@ -265,8 +274,8 @@ var PayButton = ({
       rounded: "md",
       fontWeight: "medium",
       h: "10",
-      bgColor: colors.primary,
-      color: "white",
+      bgColor: cols.primary,
+      color: cols.secondary,
       _hover: { bgColor: "#7C4DFF" },
       _active: { bgColor: "#6B45FF" },
       transition: "all 0.2s ease-in-out",
@@ -380,7 +389,9 @@ var PayModal = ({
   onError,
   onSuccess,
   metadata,
-  prices
+  avatar,
+  prices,
+  theme
 }) => {
   const [activeMethod, setActiveMethod] = (0, import_react6.useState)("sol");
   const methods = (0, import_react6.useMemo)(() => {
@@ -404,7 +415,8 @@ var PayModal = ({
       children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react5.ModalOverlay, {}),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_react5.ModalContent, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_react5.ModalHeader, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_react5.ModalHeader, { display: "flex", alignItems: "center", gap: "2", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react5.Image, { src: avatar, alt: "avatar", h: "8", w: "8", rounded: "sm" }),
             /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_react5.Text, { fontWeight: "bold", fontSize: "lg", children: [
               "Pay $",
               metadata == null ? void 0 : metadata.amount
@@ -439,7 +451,8 @@ var PayModal = ({
                   }, {
                     onSuccess,
                     onError,
-                    amountToShow
+                    amountToShow,
+                    theme
                   })
                 )
               ]

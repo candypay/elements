@@ -1,16 +1,9 @@
-import { SessionMetadataResponse, PricesEntity } from '@candypay/checkout-sdk';
-import { IIntent } from '../../typings/intent.js';
+import { IModalProps } from '../../typings/index.js';
 import { FC } from 'react';
+import '../../typings/Context.js';
+import '@candypay/checkout-sdk';
+import '../../typings/intent.js';
 
-interface IProps {
-    isOpen: boolean;
-    onClose: () => void;
-    intentData: IIntent;
-    onSuccess?: Function;
-    onError?: Function;
-    metadata: SessionMetadataResponse;
-    prices: PricesEntity[];
-}
-declare const PayModal: FC<IProps>;
+declare const PayModal: FC<IModalProps>;
 
 export { PayModal };

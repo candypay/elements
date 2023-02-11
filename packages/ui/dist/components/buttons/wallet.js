@@ -32,12 +32,20 @@ module.exports = __toCommonJS(wallet_exports);
 
 // src/lib/hooks/useTheme.ts
 var import_react = require("react");
-var useTheme = () => {
-  const [colors, setColors] = (0, import_react.useState)({
-    primary: "#8B55FF",
-    secondary: "#FFFFFF"
-  });
-  return { colors, setColors };
+var useTheme = (theme) => {
+  const cols = (0, import_react.useMemo)(() => {
+    if (!theme)
+      return {
+        primary: "#8B55FF",
+        secondary: "#FFFFFF"
+      };
+    const { primaryColor, secondaryColor } = theme;
+    return {
+      primary: primaryColor,
+      secondary: secondaryColor
+    };
+  }, [theme]);
+  return cols;
 };
 
 // src/components/buttons/wallet.tsx
@@ -51,14 +59,14 @@ var WalletMultiButton = (0, import_dynamic.default)(
     ssr: false
   }
 );
-var ConnectWallet = () => {
-  const { colors } = useTheme();
+var ConnectWallet = ({ theme }) => {
+  const colors = useTheme(theme);
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     WalletMultiButton,
     {
       style: {
         backgroundColor: colors.primary,
-        color: "white",
+        color: colors.secondary,
         borderRadius: "0.375rem",
         padding: "0.3rem 1rem",
         fontWeight: "regular",

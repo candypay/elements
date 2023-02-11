@@ -1,4 +1,4 @@
 import '@candypay/checkout-sdk';
-export { IPayProps, IProps } from './index.js';
-import './Context.js';
+export { IModalProps, IPay, IPayProps, IProps, ITheme } from './index.js';
 import './intent.js';
+import './Context.js';

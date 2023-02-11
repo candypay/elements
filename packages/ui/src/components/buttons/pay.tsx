@@ -1,5 +1,5 @@
 import { useTheme } from "@/lib/hooks/useTheme";
-import { IIntent, TTokens } from "@/typings";
+import { IPay } from "@/typings";
 import { generateTxn } from "@/utils/sendTxn";
 import { updateTxn } from "@/utils/updateTxn";
 import { Button, Skeleton } from "@chakra-ui/react";
@@ -7,18 +7,7 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation } from "@tanstack/react-query";
 import { FC } from "react";
 
-interface IProps {
-  method: TTokens;
-  amount: number;
-  intentData: IIntent;
-  merchant: string;
-  onClose: () => void;
-  onSuccess?: any;
-  onError?: any;
-  amountToShow: number;
-}
-
-const PayButton: FC<IProps> = ({
+const PayButton: FC<IPay> = ({
   method,
   amount,
   intentData,
@@ -27,10 +16,11 @@ const PayButton: FC<IProps> = ({
   onSuccess,
   onError,
   amountToShow,
+  theme,
 }) => {
   const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
-  const { colors } = useTheme();
+  const cols = useTheme(theme!);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async () => {
@@ -65,8 +55,8 @@ const PayButton: FC<IProps> = ({
           rounded="md"
           fontWeight="medium"
           h="10"
-          bgColor={colors.primary}
-          color="white"
+          bgColor={cols.primary}
+          color={cols.secondary}
           _hover={{ bgColor: "#7C4DFF" }}
           _active={{ bgColor: "#6B45FF" }}
           transition="all 0.2s ease-in-out"

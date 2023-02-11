@@ -5,7 +5,7 @@ import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useMutation } from "@tanstack/react-query";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { CheckoutContext } from "..";
 import { ConnectWallet } from "./buttons/wallet";
 import { PayModal } from "./modals/pay";
@@ -15,6 +15,8 @@ const PayElement: FC<IProps> = ({
   onError,
   onSuccess,
   theme,
+  value,
+  className,
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { publicKey } = useWallet();
@@ -22,27 +24,13 @@ const PayElement: FC<IProps> = ({
     intentSecret: "",
     sessionId: "",
   } as IIntent);
-  const { colors, setColors } = useTheme();
   const [metadata, setMetadata] = useState<SessionMetadataResponse>(
     {} as SessionMetadataResponse
   );
   const [prices, setPrices] = useState<PricesEntity[]>([] as PricesEntity[]);
+  const [avatar, setAvatar] = useState<string>("");
   const { publicApiKey } = useContext(CheckoutContext);
-
-  useEffect(() => {
-    if (theme?.primaryColor) {
-      setColors({
-        ...colors,
-        primary: theme?.primaryColor,
-      });
-    }
-    if (theme?.secondaryColor) {
-      setColors({
-        ...colors,
-        secondary: theme?.secondaryColor,
-      });
-    }
-  }, [colors, setColors, theme]);
+  const cols = useTheme(theme!);
 
   const { mutate, isLoading } = useMutation(
     ["generateIntent"],
@@ -55,6 +43,7 @@ const PayElement: FC<IProps> = ({
       });
 
       const response = await getIntent(publicApiKey, res.session_id);
+      setAvatar(response.merchant.avatar);
       setPrices(response.prices);
     },
     {
@@ -70,7 +59,8 @@ const PayElement: FC<IProps> = ({
         isOpen={isOpen}
         onClose={onClose}
         intentData={intentData}
-        {...{ onSuccess, onError, metadata, prices }}
+        {...{ onSuccess, onError, metadata, prices, avatar }}
+        theme={theme!}
       />
       {publicKey ? (
         <Button
@@ -78,18 +68,19 @@ const PayElement: FC<IProps> = ({
           rounded="md"
           fontWeight="medium"
           h="10"
-          bgColor={colors.primary}
-          color="white"
+          bgColor={cols.primary}
+          color={cols.secondary}
           _hover={{ bgColor: "#7C4DFF" }}
           _active={{ bgColor: "#6B45FF" }}
           transition="all 0.2s ease-in-out"
           onClick={() => mutate()}
           isLoading={isLoading}
+          className={className}
         >
-          Pay with CandyPay
+          {value || "Pay with CandyPay"}
         </Button>
       ) : (
-        <ConnectWallet />
+        <ConnectWallet theme={theme!} />
       )}
     </>
   );

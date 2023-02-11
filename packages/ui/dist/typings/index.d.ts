@@ -1,20 +1,45 @@
 export { ICheckoutContext } from './Context.js';
-import { CreateIntentResponse } from '@candypay/checkout-sdk';
-export { IIntent } from './intent.js';
+import { CreateIntentResponse, SessionMetadataResponse, PricesEntity } from '@candypay/checkout-sdk';
+import { IIntent } from './intent.js';
 
 interface IPayProps {
     method: TTokens;
     onSuccess?: Function;
     onError?: Function;
 }
+interface ITheme {
+    primaryColor?: string;
+    secondaryColor?: string;
+}
 interface IProps {
     intentHandler: () => Promise<CreateIntentResponse>;
     onSuccess?: any;
     onError?: any;
-    theme?: {
-        primaryColor?: string;
-        secondaryColor?: string;
-    };
+    theme?: ITheme;
+    value?: string;
+    className?: string;
+}
+interface IModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    intentData: IIntent;
+    onSuccess?: Function;
+    onError?: Function;
+    metadata: SessionMetadataResponse;
+    prices: PricesEntity[];
+    avatar: string;
+    theme: ITheme;
+}
+interface IPay {
+    method: TTokens;
+    amount: number;
+    intentData: IIntent;
+    merchant: string;
+    onClose: () => void;
+    onSuccess?: Function;
+    onError?: Function;
+    amountToShow: number;
+    theme: ITheme;
 }
 
 type TTokens = "sol" | "usdc" | "shdw" | "dust";
@@ -29,4 +54,4 @@ interface IMethodProps {
     method: TTokens;
 }
 
-export { IMethodProps, IMethods, IPayProps, IProps, TTokens };
+export { IIntent, IMethodProps, IMethods, IModalProps, IPay, IPayProps, IProps, ITheme, TTokens };

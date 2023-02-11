@@ -1,7 +1,7 @@
-import { IIntent, TTokens } from "@/typings";
+import { IModalProps, TTokens } from "@/typings";
 import { resolveAmount } from "@/utils/resolveAmount";
-import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";
 import {
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,24 +14,16 @@ import { FC, useMemo, useState } from "react";
 import { PayButton } from "../buttons/pay";
 import { Methods } from "../elements/methods";
 
-interface IProps {
-  isOpen: boolean;
-  onClose: () => void;
-  intentData: IIntent;
-  onSuccess?: Function;
-  onError?: Function;
-  metadata: SessionMetadataResponse;
-  prices: PricesEntity[];
-}
-
-const PayModal: FC<IProps> = ({
+const PayModal: FC<IModalProps> = ({
   isOpen,
   onClose,
   intentData,
   onError,
   onSuccess,
   metadata,
+  avatar,
   prices,
+  theme,
 }) => {
   const [activeMethod, setActiveMethod] = useState<TTokens>("sol");
 
@@ -59,7 +51,8 @@ const PayModal: FC<IProps> = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
+        <ModalHeader display="flex" alignItems="center" gap="2">
+          <Image src={avatar} alt="avatar" h="8" w="8" rounded="sm" />
           <Text fontWeight="bold" fontSize="lg">
             Pay ${metadata?.amount}
           </Text>
@@ -88,6 +81,7 @@ const PayModal: FC<IProps> = ({
               onSuccess,
               onError,
               amountToShow,
+              theme,
             }}
           />
         </ModalBody>

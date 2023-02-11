@@ -1,4 +1,5 @@
 import { useTheme } from "@/lib/hooks/useTheme";
+import { ITheme } from "@/typings";
 import dynamic from "next/dynamic";
 import { FC } from "react";
 
@@ -12,14 +13,16 @@ const WalletMultiButton = dynamic(
   }
 );
 
-const ConnectWallet: FC = () => {
-  const { colors } = useTheme();
+const ConnectWallet: FC<{
+  theme: ITheme;
+}> = ({ theme }) => {
+  const colors = useTheme(theme!);
 
   return (
     <WalletMultiButton
       style={{
         backgroundColor: colors.primary,
-        color: "white",
+        color: colors.secondary,
         borderRadius: "0.375rem",
         padding: "0.3rem 1rem",
         fontWeight: "regular",
