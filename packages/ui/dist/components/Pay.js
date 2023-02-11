@@ -190,7 +190,6 @@ var import_wallet_adapter_solflare = require("@solana/wallet-adapter-solflare");
 var import_web32 = require("@solana/web3.js");
 var import_react2 = require("react");
 var import_jsx_runtime = require("react/jsx-runtime");
-import("@solana/wallet-adapter-react-ui/styles.css");
 
 // src/providers/Checkout.tsx
 var import_jsx_runtime2 = require("react/jsx-runtime");

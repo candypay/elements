@@ -84,7 +84,6 @@ var import_wallet_adapter_solflare = require("@solana/wallet-adapter-solflare");
 var import_web3 = require("@solana/web3.js");
 var import_react = require("react");
 var import_jsx_runtime = require("react/jsx-runtime");
-import("@solana/wallet-adapter-react-ui/styles.css");
 var ClientWalletProvider = ({ children }) => {
   const endpoint = (0, import_web3.clusterApiUrl)(import_wallet_adapter_base.WalletAdapterNetwork.Mainnet);
   const wallets = (0, import_react.useMemo)(

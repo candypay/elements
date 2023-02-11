@@ -9,7 +9,6 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
 import { clusterApiUrl } from "@solana/web3.js";
 import { FC, ReactNode, useMemo } from "react";
-import("@solana/wallet-adapter-react-ui/styles.css" as any);
 
 interface IProps {
   children: ReactNode;
