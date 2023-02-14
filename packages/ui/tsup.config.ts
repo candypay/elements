@@ -7,5 +7,5 @@ export const tsupReactConfig: Options = {
   keepNames: true,
   minify: true,
   sourcemap: true,
-  format: ["cjs"],
+  format: ["esm"],
 };
