@@ -1,16 +1,17 @@
 {
   "name": "@candypay/elements",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "publishConfig": {
     "access": "public"
   },
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && tsup src/* --dts --format esm",
-    "dev": "tsup src/* --dts --watch --format esm",
+    "build": "rm -rf dist && tsup src/* --dts --format esm,cjs",
+    "dev": "tsup src/* --dts --watch --format esm,cjs",
     "lint": "eslint *.ts*"
   },
   "devDependencies": {
