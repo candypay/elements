@@ -1,6 +1,6 @@
-### basic stuff that ppl write, generic stuff
+### CandyPay payment component
 
-blah blah
+Integrate payment component natively in your platform and start accepting SOL and SPL token payments, seamlessly! 
 
 ## Installation
 
@@ -101,9 +101,9 @@ const handler: NextApiHandler = async (req, res) => {
     tokens: ["shdw", "bonk"],
     items: [
       {
-        name: "Test Product 1",
-        image: "https://candypay.fun/assets/logo.png",
-        price: 0.01,
+        name: "Nike Air Force",
+        image: "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-shoes-WrLlWX.png",
+        price: 0.1,
         quantity: 1,
       },
     ],
