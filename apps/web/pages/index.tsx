@@ -2,6 +2,7 @@ import { CreateIntentResponse } from "@candypay/checkout-sdk";
 import axios from "axios";
 import { PayElement } from "@candypay/elements";
 import { toast } from "react-hot-toast";
+import { SuccessResponse } from "@candypay/elements";
 
 export default function Web() {
   const intentHandler = async (): Promise<CreateIntentResponse> => {
@@ -21,8 +22,8 @@ export default function Web() {
     >
       <PayElement
         intentHandler={intentHandler}
-        onSuccess={() => {
-          console.log("success");
+        onSuccess={(d: SuccessResponse) => {
+          console.log(d.signature);
           toast.success("Payment successful");
         }}
         onError={() => {

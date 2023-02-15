@@ -4,11 +4,11 @@ import {
   SessionMetadataResponse,
 } from "@candypay/checkout-sdk";
 import { UseMutateFunction } from "@tanstack/react-query";
-import { IIntent, TTokens } from ".";
+import { IIntent, ISuccessResponse, TTokens } from ".";
 
 interface IPayProps {
   method: TTokens;
-  onSuccess?: Function;
+  onSuccess?: (response: ISuccessResponse) => void;
   onError?: Function;
 }
 

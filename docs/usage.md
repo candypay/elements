@@ -139,3 +139,38 @@ const theme = {
   secondaryColor: "#0000ff",
 };
 ```
+
+### onSuccess
+
+The `onSuccess` prop is called when the payment is successful. It is passed an object with the following params:
+
+```ts
+{
+  customer: string; // the public key of the customer in string format
+  signature: string; // signature of the transaction
+}
+```
+
+#### Example
+
+```ts
+<PayElement
+  intentHandler={intentHandler}
+  onSuccess={(d: SuccessResponse) => {
+    console.log(d.signature);
+    toast.success("Payment successful");
+  }}
+  onError={() => {
+    console.log("error");
+    toast.error("Payment failed");
+  }}
+/>
+```
+
+In the above example, `SuccessResponse` is a type imported from the sdk like so:
+
+```ts
+import { SuccessResponse } from "@candypay/elements";
+```
+
+If you're using js, you can ignore assigning the type to the `onSuccess` prop.

@@ -23,7 +23,11 @@ const PayButton: FC<IPay> = ({
   const cols = useTheme(theme!);
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: async (): Promise<ISuccessResponse> => {
+    mutationFn: async (): Promise<
+      ISuccessResponse & {
+        error: boolean;
+      }
+    > => {
       const txn = await generateTxn(method, merchant, amount, publicKey!);
 
       const signature = await sendTransaction(txn!, connection);
@@ -41,7 +45,11 @@ const PayButton: FC<IPay> = ({
     },
     onSuccess: (data) => {
       if (!data.error) {
-        onSuccess && onSuccess(data);
+        onSuccess &&
+          onSuccess({
+            signature: data.signature,
+            customer: data.customer,
+          });
         onClose();
       }
     },
