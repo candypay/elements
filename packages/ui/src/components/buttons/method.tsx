@@ -1,7 +1,8 @@
 import { MainnetTokens, MAINNET_TOKENS } from "@/lib";
 import { Button, Image, Text } from "@chakra-ui/react";
-import type { FC } from "react";
+import { FC, useMemo } from "react";
 import { IMethodProps } from "@/typings";
+import { useTheme } from "@/lib/hooks/useTheme";
 
 const btnStyles = {
   variant: "outline",
@@ -24,12 +25,24 @@ const MethodButton: FC<IMethodProps> = ({
   activeMethod,
   setActiveMethod,
   method,
+  theme,
 }) => {
+  const cols = useTheme(theme);
+  const borderColor = useMemo(() => {
+    return cols.primary
+      ? activeMethod === method
+        ? cols.primary
+        : "blackAlpha.200"
+      : activeMethod === method
+      ? "purple.500"
+      : "blackAlpha.200";
+  }, [activeMethod, cols.primary, method]);
+
   return (
     <Button
       {...btnStyles}
       flexDirection="column"
-      borderColor={activeMethod === method ? "purple.500" : "blackAlpha.200"}
+      borderColor={borderColor}
       onClick={() => setActiveMethod(method)}
     >
       <Image

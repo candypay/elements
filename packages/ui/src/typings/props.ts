@@ -58,4 +58,27 @@ interface IRendererProps {
   theme?: ITheme;
 }
 
-export type { IPayProps, IProps, ITheme, IModalProps, IPay, IRendererProps };
+interface IMethods {
+  activeMethod: TTokens;
+  setActiveMethod: (method: TTokens) => void;
+  methods: TTokens[];
+  theme: ITheme;
+}
+
+interface IMethodProps {
+  activeMethod: TTokens;
+  setActiveMethod: (method: TTokens) => void;
+  method: TTokens;
+  theme: ITheme;
+}
+
+export type {
+  IPayProps,
+  IProps,
+  ITheme,
+  IModalProps,
+  IPay,
+  IRendererProps,
+  IMethods,
+  IMethodProps,
+};

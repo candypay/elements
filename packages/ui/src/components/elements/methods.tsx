@@ -3,7 +3,12 @@ import { Flex, Grid, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { MethodButton } from "../buttons/method";
 
-const Methods: FC<IMethods> = ({ activeMethod, setActiveMethod, methods }) => {
+const Methods: FC<IMethods> = ({
+  activeMethod,
+  setActiveMethod,
+  methods,
+  theme,
+}) => {
   return (
     <Flex direction="column" gap="3" w="full">
       <Text fontSize="md" fontWeight="500" color="#697386" textAlign="left">
@@ -27,6 +32,7 @@ const Methods: FC<IMethods> = ({ activeMethod, setActiveMethod, methods }) => {
             activeMethod={activeMethod}
             setActiveMethod={setActiveMethod}
             method={method}
+            theme={theme}
           />
         ))}
       </Grid>

@@ -70,6 +70,7 @@ const PayModal: FC<IModalProps> = ({
             activeMethod={activeMethod}
             setActiveMethod={setActiveMethod}
             methods={methods!}
+            theme={theme}
           />
           <PayButton
             method={activeMethod}
@@ -84,6 +85,13 @@ const PayModal: FC<IModalProps> = ({
               theme,
             }}
           />
+
+          <Text fontWeight="medium" color="gray.500">
+            Powered by{" "}
+            <Text as="span" color="gray.700">
+              CandyPay
+            </Text>
+          </Text>
         </ModalBody>
       </ModalContent>
     </Modal>

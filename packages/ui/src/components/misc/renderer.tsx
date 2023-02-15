@@ -23,8 +23,10 @@ const Renderer: FC<IRendererProps> = ({
       h="10"
       bgColor={cols.primary}
       color={cols.secondary}
-      _hover={{ bgColor: "#7C4DFF" }}
-      _active={{ bgColor: "#6B45FF" }}
+      _hover={{ bgColor: !cols.primary ? "#7C4DFF" : "auto" }}
+      _active={{
+        bgColor: !cols.primary ? "#6B45FF" : "auto",
+      }}
       transition="all 0.2s ease-in-out"
       onClick={() => mutate()}
       isLoading={isLoading}

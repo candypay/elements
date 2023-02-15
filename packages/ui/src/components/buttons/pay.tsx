@@ -1,5 +1,5 @@
 import { useTheme } from "@/lib/hooks/useTheme";
-import { IPay } from "@/typings";
+import { IPay, ISuccessResponse } from "@/typings";
 import { generateTxn } from "@/utils/sendTxn";
 import { updateTxn } from "@/utils/updateTxn";
 import { Button, Skeleton } from "@chakra-ui/react";
@@ -23,7 +23,7 @@ const PayButton: FC<IPay> = ({
   const cols = useTheme(theme!);
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (): Promise<ISuccessResponse> => {
       const txn = await generateTxn(method, merchant, amount, publicKey!);
 
       const signature = await sendTransaction(txn!, connection);
@@ -33,7 +33,11 @@ const PayButton: FC<IPay> = ({
         intentData.intentSecret
       );
 
-      return res;
+      return {
+        signature,
+        customer: publicKey?.toString()!,
+        error: res.error,
+      };
     },
     onSuccess: (data) => {
       if (!data.error) {
@@ -57,8 +61,8 @@ const PayButton: FC<IPay> = ({
           h="10"
           bgColor={cols.primary}
           color={cols.secondary}
-          _hover={{ bgColor: "#7C4DFF" }}
-          _active={{ bgColor: "#6B45FF" }}
+          _hover={{ bgColor: !cols.primary ? "#7C4DFF" : "auto" }}
+          _active={{ bgColor: !cols.primary ? "#6B45FF" : "auto" }}
           transition="all 0.2s ease-in-out"
           onClick={() => mutate()}
           isLoading={isLoading}
