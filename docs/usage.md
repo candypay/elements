@@ -1,6 +1,6 @@
 ### CandyPay payment component
 
-Integrate payment component natively in your platform and start accepting SOL and SPL token payments, seamlessly! 
+Integrate payment component natively in your platform and start accepting SOL and SPL token payments, seamlessly!
 
 ## Installation
 
@@ -102,7 +102,8 @@ const handler: NextApiHandler = async (req, res) => {
     items: [
       {
         name: "Nike Air Force",
-        image: "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-shoes-WrLlWX.png",
+        image:
+          "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-shoes-WrLlWX.png",
         price: 0.1,
         quantity: 1,
       },
@@ -148,6 +149,8 @@ The `onSuccess` prop is called when the payment is successful. It is passed an o
 {
   customer: string; // the public key of the customer in string format
   signature: string; // signature of the transaction
+  amount: number; // amount paid
+  timestamp: number; // timestamp of the transaction
 }
 ```
 

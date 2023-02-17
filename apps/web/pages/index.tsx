@@ -23,6 +23,7 @@ export default function Web() {
       <PayElement
         intentHandler={intentHandler}
         onSuccess={(d: SuccessResponse) => {
+          console.log(d.timestamp);
           console.log(d.signature);
           toast.success("Payment successful");
         }}

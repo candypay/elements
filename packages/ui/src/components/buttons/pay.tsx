@@ -31,6 +31,7 @@ const PayButton: FC<IPay> = ({
       const txn = await generateTxn(method, merchant, amount, publicKey!);
 
       const signature = await sendTransaction(txn!, connection);
+      const timestamp = new Date().toISOString();
       const res = await updateTxn(
         intentData.sessionId,
         signature,
@@ -41,6 +42,8 @@ const PayButton: FC<IPay> = ({
         signature,
         customer: publicKey?.toString()!,
         error: res.error,
+        amount,
+        timestamp: new Date(timestamp).getTime(),
       };
     },
     onSuccess: (data) => {
@@ -49,6 +52,8 @@ const PayButton: FC<IPay> = ({
           onSuccess({
             signature: data.signature,
             customer: data.customer,
+            amount: data.amount,
+            timestamp: data.timestamp,
           });
         onClose();
       }
