@@ -1,6 +1,6 @@
 interface IIntent {
   intentSecret: string;
-  sessionId: string;
+  intentId: string;
 }
 
 export type { IIntent };

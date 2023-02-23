@@ -20,7 +20,7 @@ const PayElement: FC<IProps> = ({
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [intentData, setIntentData] = useState<IIntent>({
     intentSecret: "",
-    sessionId: "",
+    intentId: "",
   } as IIntent);
   const [metadata, setMetadata] = useState<SessionMetadataResponse>(
     {} as SessionMetadataResponse
@@ -36,10 +36,10 @@ const PayElement: FC<IProps> = ({
       setMetadata(res.metadata as SessionMetadataResponse);
       setIntentData({
         intentSecret: res.intent_secret_key,
-        sessionId: res.session_id,
+        intentId: res.intent_id,
       });
 
-      const response = await getIntent(publicApiKey, res.session_id);
+      const response = await getIntent(publicApiKey, res.intent_id);
       setAvatar(response.merchant.avatar);
       setPrices(response.prices);
     },

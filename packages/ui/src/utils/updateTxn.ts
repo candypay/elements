@@ -1,4 +1,4 @@
-import { DEV_API_URL } from "@/lib";
+import { API_URL } from "@/lib";
 import axios, { AxiosRequestConfig } from "axios";
 
 const updateTxn = async (
@@ -8,7 +8,7 @@ const updateTxn = async (
 ) => {
   const options: AxiosRequestConfig = {
     method: "PATCH",
-    url: `${DEV_API_URL}/api/v1/intent`,
+    url: `${API_URL}/api/v1/intent`,
     headers: {
       Authorization: `Bearer ${intent_secret_key}`,
     },
@@ -21,7 +21,6 @@ const updateTxn = async (
 
   try {
     const res = await axios(options);
-
     return res.data;
   } catch (error) {
     console.log(error);

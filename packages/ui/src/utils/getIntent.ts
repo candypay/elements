@@ -1,19 +1,21 @@
-import { DEV_API_URL } from "@/lib";
+import { API_URL } from "@/lib";
 import { IData } from "@/typings/data";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 const getIntent = async (
   publicApiKey: string,
-  sessionId: string
+  intentId: string
 ): Promise<IData> => {
-  const { data } = await axios.get(`${DEV_API_URL}/api/v1/intent`, {
+  const options: AxiosRequestConfig = {
+    url: `${API_URL}/api/v1/intent`,
     headers: {
       Authorization: `Bearer ${publicApiKey}`,
     },
     params: {
-      session_id: sessionId,
+      intent_id: intentId,
     },
-  });
+  };
+  const { data } = await axios(options);
 
   return data;
 };

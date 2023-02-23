@@ -33,7 +33,7 @@ const PayButton: FC<IPay> = ({
       const signature = await sendTransaction(txn!, connection);
       const timestamp = new Date().toISOString();
       const res = await updateTxn(
-        intentData.sessionId,
+        intentData.intentId,
         signature,
         intentData.intentSecret
       );
