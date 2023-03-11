@@ -1,5 +1,6 @@
 import { ClientWalletProvider } from "@/providers/Wallet";
 import { IIntent, IProps } from "@/typings";
+import { fetchTokenPrices } from "@/utils/fetchTokenPrices";
 import { getIntent } from "@/utils/getIntent";
 import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";
 import { useDisclosure } from "@chakra-ui/react";
@@ -34,14 +35,16 @@ const PayElement: FC<IProps> = ({
     async () => {
       const res = await intentHandler();
       setMetadata(res.metadata as SessionMetadataResponse);
+      setAvatar((res.user as any).avatar);
+
+      const tokens = ["sol", "usdc", ...(res.metadata as any).tokens.tokens];
+
+      const prices = await fetchTokenPrices(tokens);
+      setPrices(prices);
       setIntentData({
         intentSecret: res.intent_secret_key,
         intentId: res.intent_id,
       });
-
-      const response = await getIntent(publicApiKey, res.intent_id);
-      setAvatar(response.merchant.avatar);
-      setPrices(response.prices);
     },
     {
       onSuccess: () => {

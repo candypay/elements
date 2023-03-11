@@ -29,7 +29,8 @@
     "react": "^18.2.0"
   },
   "dependencies": {
-    "@candypay/checkout-sdk": "0.1.51",
+    "@candypay/checkout-sdk": "0.1.52-alpha.0",
+    "@candypay/common": "^0.0.10",
     "@chakra-ui/react": "^2.4.9",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
