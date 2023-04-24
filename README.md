@@ -174,3 +174,5 @@ import { SuccessResponse } from "@candypay/elements";
 ```
 
 If you're using js, you can ignore assigning the type to the `onSuccess` prop.
+
+> **_NOTE:_**  If you're using Vercel serverless functions then the initial API request might take a while because of the cold start. 
