@@ -1,6 +1,10 @@
 import { NextApiHandler } from "next";
 import { candypay } from "../../../lib/init/candypay";
 
+export const config = {
+  runtime: "edge",
+};
+
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).end();
