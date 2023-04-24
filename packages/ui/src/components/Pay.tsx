@@ -33,13 +33,19 @@ const PayElement: FC<IProps> = ({
   const { mutate, isLoading } = useMutation(
     ["generateIntent"],
     async () => {
+      console.time("generateIntent");
       const res = await intentHandler();
+      console.timeEnd("generateIntent");
+
       setMetadata(res.metadata as SessionMetadataResponse);
       setAvatar((res.user as any).avatar);
 
       const tokens = ["sol", "usdc", ...(res.metadata as any).tokens.tokens];
 
+      console.time("fetchTokenPrices");
       const prices = await fetchTokenPrices(tokens);
+      console.timeEnd("fetchTokenPrices");
+
       setPrices(prices);
       setIntentData({
         intentSecret: res.intent_secret_key,
