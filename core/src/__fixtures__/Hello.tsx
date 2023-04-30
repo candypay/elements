@@ -1,3 +1,3 @@
-import { Hello } from "./Hello";
+import { Hello } from "../components/Hello";
 
 export default <Hello greeting="Aloha" name="Alexa" />;

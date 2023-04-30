@@ -12,8 +12,21 @@
     "cosmos:export": "cosmos-export"
   },
   "dependencies": {
+    "@candypay/common": "^0.0.10",
+    "@radix-ui/react-dialog": "^1.0.3",
+    "@radix-ui/react-slot": "^1.0.1",
+    "@solana/wallet-adapter-base": "^0.9.22",
+    "@solana/wallet-adapter-react": "^0.15.32",
+    "@solana/wallet-adapter-react-ui": "^0.9.31",
+    "@solana/wallet-adapter-wallets": "^0.19.16",
+    "@solana/web3.js": "^1.75.0",
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^1.2.1",
+    "lucide-react": "^0.188.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwind-merge": "^1.12.0",
+    "tailwindcss-animate": "^1.0.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
@@ -27,7 +40,7 @@
     "eslint-plugin-react-refresh": "^0.3.4",
     "postcss": "^8.4.23",
     "react-cosmos": "6.0.0-alpha.17",
-    "react-cosmos-dom": "6.0.0-alpha.0",
+    "react-cosmos-dom": "6.0.0-alpha.17",
     "react-cosmos-plugin-vite": "6.0.0-alpha.17",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.2",

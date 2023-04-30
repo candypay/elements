@@ -1,9 +1,10 @@
 import "./App.css";
+import { PayElement } from "./components/main";
 
 function App() {
   return (
     <main>
-      <p className="text-2xl">hello</p>
+      <PayElement />
     </main>
   );
 }
