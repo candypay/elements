@@ -1,51 +1,50 @@
-import { FC, useState } from "react";
-import { Button } from "./ui/button";
 import { DialogOverlay } from "@radix-ui/react-dialog";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Loader2 } from "lucide-react";
+import { FC, useMemo, useState } from "react";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
-import { useWallet } from "@solana/wallet-adapter-react";
+import { CreateIntentResponse, PricesEntity } from "@candypay/checkout-sdk";
 import { MAINNET_TOKENS, MainnetTokens } from "@candypay/common";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { cn, fetchTokenPrices } from "./lib/utils";
+import { PayButton } from "./pay";
 import { PayElementProps, Tokens } from "./typings";
-import { CreateIntentResponse } from "@candypay/checkout-sdk";
 
-const MethodSelector: FC<{
-  method: Tokens;
-}> = ({ method }) => {
-  return (
-    <div className="border-[3px] rounded-md h-[4.5rem] w-24 cursor-pointer text-sm flex flex-col items-start gap-2 justify-center px-2 text-[#94A3B8] font-medium hover:bg-neutral-50 transition-colors duration-100">
-      <img
-        src={MAINNET_TOKENS[method.toUpperCase() as MainnetTokens].image}
-        alt={method}
-        className="h-5 w-5 rounded-full"
-      />
-      {method.toUpperCase()}
-    </div>
-  );
-};
-
-const PayElement: FC<PayElementProps> = ({ intentHandler }) => {
+const PayElement: FC<PayElementProps> = ({ intentHandler, onSuccess }) => {
   const [open, setOpen] = useState(false);
   const onClose = () => {
     setOpen(false);
     setIntentData(undefined);
+    setMethod("sol");
   };
 
   const { publicKey, connected, connecting } = useWallet();
   const { setVisible } = useWalletModal();
 
-  const METHODS: Tokens[] = ["sol", "samo", "usdc", "dust"];
-
   const [loading, setLoading] = useState(false);
-  const [method, setMethod] = useState<Tokens>("sol");
+  const [activeMethod, setMethod] = useState<Tokens>("sol");
   const [intentData, setIntentData] = useState<CreateIntentResponse>();
+  const [prices, setPrices] = useState<PricesEntity[]>([]);
+
+  const tokens = useMemo(() => {
+    if (!intentData) return ["sol", "usdc"] as Tokens[];
+    const tokens = [
+      "sol",
+      "usdc",
+      ...(intentData?.metadata as any).tokens.tokens,
+    ] as Tokens[];
+    return tokens;
+  }, [intentData]);
 
   const handleClick = async () => {
     try {
       setLoading(true);
       const intent = await intentHandler();
       setIntentData(intent);
+      const tokens = ["sol", "usdc", ...(intent.metadata as any).tokens.tokens];
+      setPrices(await fetchTokenPrices(tokens));
       setOpen(true);
     } catch (error) {
       console.log(error);
@@ -70,7 +69,12 @@ const PayElement: FC<PayElementProps> = ({ intentHandler }) => {
           >
             <DialogHeader>
               <DialogTitle>
-                Pay {(intentData?.metadata as any).amount} to{" "}
+                <img
+                  src={(intentData.user as any).avatar}
+                  className="h-8 w-8 rounded-sm"
+                  alt={(intentData?.metadata as any).merchant_name}
+                />
+                Pay ${(intentData.metadata as any).amount} to{" "}
                 {(intentData?.metadata as any).merchant_name}
               </DialogTitle>
             </DialogHeader>
@@ -78,21 +82,39 @@ const PayElement: FC<PayElementProps> = ({ intentHandler }) => {
             <div className="flex flex-col gap-3">
               <p className="font-medium text-neutral-500">Choose a Token</p>
               <div className="flex justify-between">
-                {METHODS.map((method) => (
-                  <MethodSelector key={method} method={method} />
+                {tokens.map((method) => (
+                  <div
+                    className={cn(
+                      "border-[3px] rounded-md h-[4.5rem] w-24 cursor-pointer text-sm flex flex-col items-start gap-2 justify-center px-2 text-[#94A3B8] font-medium hover:bg-neutral-50 transition-colors duration-100",
+                      activeMethod === method && "border-[#8B55FF]"
+                    )}
+                    onClick={() => {
+                      setMethod(method);
+                    }}
+                    key={method}
+                  >
+                    <img
+                      src={
+                        MAINNET_TOKENS[method.toUpperCase() as MainnetTokens]
+                          .image
+                      }
+                      alt={method}
+                      className="h-5 w-5 rounded-full"
+                    />
+                    {method.toUpperCase()}
+                  </div>
                 ))}
               </div>
 
-              <Button
-                variant="brand"
-                onClick={() => {
-                  setOpen(true);
+              <PayButton
+                {...{
+                  intentData,
+                  activeMethod,
+                  prices,
+                  onSuccess,
+                  onClose,
                 }}
-                className="w-full"
-              >
-                Pay {(intentData?.metadata as any).amount}{" "}
-                {method.toUpperCase()}
-              </Button>
+              />
             </div>
           </DialogContent>
         </Dialog>

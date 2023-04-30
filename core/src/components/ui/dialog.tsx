@@ -4,7 +4,7 @@ import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
-import { cn } from "../../lib/utils";
+import { cn } from "../lib/utils";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -102,7 +102,7 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
+      "text-lg font-semibold leading-none tracking-tight flex gap-2 items-center",
       className
     )}
     {...props}

@@ -1,6 +1,7 @@
 import "./App.css";
 import { PayElement } from "./components/main";
-import { candypay } from "./lib/utils";
+import { candypay } from "./components/lib/utils";
+import { toast } from "sonner";
 
 function App() {
   const createIntent = async () => {
@@ -21,7 +22,12 @@ function App() {
 
   return (
     <main>
-      <PayElement intentHandler={createIntent} />
+      <PayElement
+        intentHandler={createIntent}
+        onSuccess={() => {
+          toast.success("Payment successful!");
+        }}
+      />
     </main>
   );
 }
