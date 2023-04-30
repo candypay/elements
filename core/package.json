@@ -12,6 +12,7 @@
     "cosmos:export": "cosmos-export"
   },
   "dependencies": {
+    "@candypay/checkout-sdk": "^0.1.55",
     "@candypay/common": "^0.0.10",
     "@radix-ui/react-dialog": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.1",
@@ -20,6 +21,7 @@
     "@solana/wallet-adapter-react-ui": "^0.9.31",
     "@solana/wallet-adapter-wallets": "^0.19.16",
     "@solana/web3.js": "^1.75.0",
+    "axios": "^1.4.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "lucide-react": "^0.188.0",
