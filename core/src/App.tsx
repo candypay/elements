@@ -1,4 +1,3 @@
-import "./App.css";
 import { PayElement } from "./components/main";
 import { candypay } from "./components/lib/utils";
 import { toast } from "sonner";
@@ -21,7 +20,10 @@ function App() {
   };
 
   return (
-    <main>
+    <main className="min-h-screen w-screen flex flex-col gap-3 justify-center items-center">
+      <p className="text-primary text-center">
+        This is a demo of CandyPay Elements.
+      </p>
       <PayElement
         intentHandler={createIntent}
         onSuccess={() => {

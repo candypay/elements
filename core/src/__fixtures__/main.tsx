@@ -1,3 +1,2 @@
-import { PayElement } from "../components/main";
-
-export default <PayElement />;
+// export default <PayElement />;
+export default "hello haha";
