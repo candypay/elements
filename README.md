@@ -96,8 +96,6 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const response = await candypay.paymentIntent.create({
-    success_url: "https://candypay.fun/success",
-    cancel_url: "https://candypay.fun/cancel",
     tokens: ["shdw", "bonk"],
     items: [
       {
@@ -107,7 +105,6 @@ const handler: NextApiHandler = async (req, res) => {
         quantity: 1,
       },
     ],
-    discounts: undefined,
   });
 
   return res.status(200).json(response);
