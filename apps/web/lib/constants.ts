@@ -1,1 +1,1 @@
-export const WALLET_NETWORK = "devnet"
+export const WALLET_NETWORK = "mainnet"
