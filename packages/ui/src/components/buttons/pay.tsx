@@ -32,7 +32,14 @@ const PayButton: FC<IPay> = ({
         error: boolean;
       }
     > => {
-      const txn = await generateTxn(method, merchant, amount, publicKey!);
+      const txn = await generateTxn(
+        method,
+        merchant,
+        amount,
+        publicKey!,
+        network,
+        amountToShow
+      );
 
       const signature = await sendTransaction(txn!, connection);
       const timestamp = new Date().toISOString();
