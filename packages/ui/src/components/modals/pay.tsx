@@ -1,3 +1,4 @@
+import { CheckoutContext } from "../../providers/Checkout";
 import { IModalProps, TTokens } from "@/typings";
 import { resolveAmount } from "@/utils/resolveAmount";
 import {
@@ -10,7 +11,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { FC, useMemo, useState } from "react";
+import { FC, useContext, useMemo, useState } from "react";
 import { PayButton } from "../buttons/pay";
 import { Methods } from "../elements/methods";
 
@@ -26,16 +27,17 @@ const PayModal: FC<IModalProps> = ({
   theme,
 }) => {
   const [activeMethod, setActiveMethod] = useState<TTokens>("sol");
+  const { network } = useContext(CheckoutContext);
 
   const methods = useMemo(() => {
     const defaultMethods = ["sol", "usdc"] as TTokens[];
 
-    if (!metadata.tokens) {
+    if (!metadata.tokens || network === "devnet") {
       return defaultMethods;
     }
 
     return [...defaultMethods, ...metadata.tokens.tokens!] as TTokens[];
-  }, [metadata.tokens]);
+  }, [metadata.tokens, network]);
 
   const amountToShow = useMemo(() => {
     return resolveAmount(activeMethod, prices, metadata.amount);
