@@ -1,4 +1,4 @@
-import { ClientWalletProvider } from "@/providers/Wallet";
+import { ClientWalletProvider } from "@/providers/wallet";
 import { IIntent, IProps } from "@/typings";
 import { fetchTokenPrices } from "@/utils/fetchTokenPrices";
 import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";

@@ -1,4 +1,3 @@
-import { CheckoutContext } from "../../providers/Checkout";
 import { IModalProps, TTokens } from "@/typings";
 import { resolveAmount } from "@/utils/resolveAmount";
 import {
@@ -11,11 +10,13 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { Badge } from "@supabase/ui";
 import { FC, useContext, useMemo, useState } from "react";
+import { CheckoutContext } from "../../providers/checkout";
 import { PayButton } from "../buttons/pay";
 import { Methods } from "../elements/methods";
 
-const PayModal: FC<IModalProps> = ({
+export const PayModal: FC<IModalProps> = ({
   isOpen,
   onClose,
   intentData,
@@ -58,6 +59,10 @@ const PayModal: FC<IModalProps> = ({
           <Text fontWeight="bold" fontSize="lg">
             Pay ${metadata?.amount}
           </Text>
+
+          {metadata.network === "devnet" && (
+            <Badge color="purple">{metadata.network}</Badge>
+          )}
           <ModalCloseButton />
         </ModalHeader>
 
@@ -99,5 +104,3 @@ const PayModal: FC<IModalProps> = ({
     </Modal>
   );
 };
-
-export { PayModal };

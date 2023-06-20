@@ -1,4 +1,4 @@
-import { CheckoutContext } from "../../providers/Checkout";
+import { CheckoutContext } from "../../providers/checkout";
 import { useConnection } from "@/lib/hooks/useConnection";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { IPay, ISuccessResponse } from "@/typings";
