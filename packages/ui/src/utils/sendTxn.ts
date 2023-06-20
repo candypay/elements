@@ -1,27 +1,53 @@
-import { MainnetTokens, MAINNET_TOKENS, PAY_API_URL, reference } from "@/lib";
+import {
+  DevnetTokens,
+  DEVNET_TOKENS,
+  MainnetTokens,
+  MAINNET_TOKENS,
+  PAY_API_URL,
+  reference,
+} from "@/lib";
 import { TTokens } from "@/typings";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import axios, { AxiosRequestConfig } from "axios";
 
 const generateTxn = async (
   method: TTokens,
   merchant: string,
   amount: number,
-  publicKey: PublicKey
+  publicKey: PublicKey,
+  network: "mainnet" | "devnet",
+  amountOfTokens: number
 ) => {
   try {
     const fee = 0.01;
+
+    if (network === "devnet" && method === "sol") {
+      const transaction = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: publicKey!,
+          toPubkey: new PublicKey(merchant),
+          lamports: LAMPORTS_PER_SOL * amountOfTokens,
+        })
+      );
+  
+      return transaction;
+    }
 
     const options: AxiosRequestConfig = {
       method: "POST",
       url: `${PAY_API_URL}/builder/${method === "usdc" ? "spl" : "atomic"}`,
       data: {
-        network: "mainnet",
+        network,
         user: publicKey.toString(),
         merchant: merchant,
         input_token:
-          MAINNET_TOKENS[method.toUpperCase() as MainnetTokens].address,
-        token_address: MAINNET_TOKENS.USDC.address,
+          network === "mainnet"
+            ? MAINNET_TOKENS[method.toUpperCase() as MainnetTokens].address
+            : DEVNET_TOKENS[method.toUpperCase() as DevnetTokens].address,
+        token_address:
+          network === "mainnet"
+            ? MAINNET_TOKENS["USDC"].address
+            : DEVNET_TOKENS["USDC"].address,
         reference: reference.publicKey.toBase58(),
         amount: Number(amount),
         fee: fee,

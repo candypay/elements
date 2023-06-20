@@ -14,10 +14,20 @@ import { FC, ReactNode, useMemo } from "react";
 
 interface IProps {
   children: ReactNode;
+  network: "mainnet" | "devnet";
 }
 
-const ClientWalletProvider: FC<IProps> = ({ children }) => {
-  const endpoint = clusterApiUrl(WalletAdapterNetwork.Mainnet);
+const ClientWalletProvider: FC<IProps> = ({ children, network }) => {
+  const endpoint = useMemo(() => {
+    switch (network) {
+      case "mainnet":
+        return clusterApiUrl(WalletAdapterNetwork.Mainnet);
+      case "devnet":
+        return clusterApiUrl(WalletAdapterNetwork.Devnet);
+      default:
+        return clusterApiUrl(WalletAdapterNetwork.Mainnet);
+    }
+  }, [network]);
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),

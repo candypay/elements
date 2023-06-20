@@ -3,7 +3,7 @@ import { IRendererProps } from "@/typings";
 import { Button } from "@chakra-ui/react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { FC } from "react";
-import { ConnectWallet } from "../buttons/wallet";
+import { ConnectButton } from "../buttons/connect";
 
 const Renderer: FC<IRendererProps> = ({
   className,
@@ -35,7 +35,7 @@ const Renderer: FC<IRendererProps> = ({
       {value || "Pay with CandyPay"}
     </Button>
   ) : (
-    <ConnectWallet theme={theme!} />
+    <ConnectButton theme={theme!} />
   );
 };
 

@@ -1,11 +1,13 @@
+import { CheckoutContext } from "../../providers/Checkout";
+import { useConnection } from "@/lib/hooks/useConnection";
 import { useTheme } from "@/lib/hooks/useTheme";
 import { IPay, ISuccessResponse } from "@/typings";
 import { generateTxn } from "@/utils/sendTxn";
 import { updateTxn } from "@/utils/updateTxn";
 import { Button, Skeleton } from "@chakra-ui/react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { useMutation } from "@tanstack/react-query";
-import { FC } from "react";
+import { FC, useContext } from "react";
 
 const PayButton: FC<IPay> = ({
   method,
@@ -19,7 +21,9 @@ const PayButton: FC<IPay> = ({
   theme,
 }) => {
   const { publicKey, sendTransaction } = useWallet();
-  const { connection } = useConnection();
+  const { network } = useContext(CheckoutContext);
+
+  const connection = useConnection(network);
   const cols = useTheme(theme!);
 
   const { mutate, isLoading } = useMutation({
@@ -28,7 +32,14 @@ const PayButton: FC<IPay> = ({
         error: boolean;
       }
     > => {
-      const txn = await generateTxn(method, merchant, amount, publicKey!);
+      const txn = await generateTxn(
+        method,
+        merchant,
+        amount,
+        publicKey!,
+        network,
+        amountToShow
+      );
 
       const signature = await sendTransaction(txn!, connection);
       const timestamp = new Date().toISOString();
@@ -63,30 +74,26 @@ const PayButton: FC<IPay> = ({
     },
   });
 
-  return (
-    <>
-      {amountToShow ? (
-        <Button
-          px="16"
-          w="full"
-          rounded="md"
-          fontWeight="medium"
-          h="10"
-          bgColor={cols.primary}
-          color={cols.secondary}
-          _hover={{ bgColor: !cols.primary ? "#7C4DFF" : "auto" }}
-          _active={{ bgColor: !cols.primary ? "#6B45FF" : "auto" }}
-          transition="all 0.2s ease-in-out"
-          onClick={() => mutate()}
-          isLoading={isLoading}
-          isDisabled={!amount}
-        >
-          Pay {amountToShow} {method.toUpperCase()}
-        </Button>
-      ) : (
-        <Skeleton w="full" h="10" rounded="md" />
-      )}
-    </>
+  return amountToShow ? (
+    <Button
+      px="16"
+      w="full"
+      rounded="md"
+      fontWeight="medium"
+      h="10"
+      bgColor={cols.primary}
+      color={cols.secondary}
+      _hover={{ bgColor: !cols.primary ? "#7C4DFF" : "auto" }}
+      _active={{ bgColor: !cols.primary ? "#6B45FF" : "auto" }}
+      transition="all 0.2s ease-in-out"
+      onClick={() => mutate()}
+      isLoading={isLoading}
+      isDisabled={!amount}
+    >
+      Pay {amountToShow} {method.toUpperCase()}
+    </Button>
+  ) : (
+    <Skeleton w="full" h="10" rounded="md" />
   );
 };
 

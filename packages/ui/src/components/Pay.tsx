@@ -1,7 +1,6 @@
 import { ClientWalletProvider } from "@/providers/Wallet";
 import { IIntent, IProps } from "@/typings";
 import { fetchTokenPrices } from "@/utils/fetchTokenPrices";
-import { getIntent } from "@/utils/getIntent";
 import { PricesEntity, SessionMetadataResponse } from "@candypay/checkout-sdk";
 import { useDisclosure } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
@@ -28,23 +27,18 @@ const PayElement: FC<IProps> = ({
   );
   const [prices, setPrices] = useState<PricesEntity[]>([] as PricesEntity[]);
   const [avatar, setAvatar] = useState<string>("");
-  const { publicApiKey } = useContext(CheckoutContext);
+
+  const { network } = useContext(CheckoutContext);
 
   const { mutate, isLoading } = useMutation(
     ["generateIntent"],
     async () => {
-      console.time("generateIntent");
       const res = await intentHandler();
-      console.timeEnd("generateIntent");
-
       setMetadata(res.metadata as SessionMetadataResponse);
       setAvatar((res.user as any).avatar);
 
       const tokens = ["sol", "usdc", ...(res.metadata as any).tokens.tokens];
-
-      console.time("fetchTokenPrices");
       const prices = await fetchTokenPrices(tokens);
-      console.timeEnd("fetchTokenPrices");
 
       setPrices(prices);
       setIntentData({
@@ -60,7 +54,7 @@ const PayElement: FC<IProps> = ({
   );
 
   return (
-    <ClientWalletProvider>
+    <ClientWalletProvider network={network}>
       <PayModal
         isOpen={isOpen}
         onClose={onClose}

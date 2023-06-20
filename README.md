@@ -1,6 +1,6 @@
 ### CandyPay payment component
 
-Integrate payment component natively in your platform and start accepting SOL and SPL token payments, seamlessly! 
+Integrate payment component natively in your platform and start accepting SOL and SPL token payments, seamlessly!
 
 ## Installation
 
@@ -10,17 +10,16 @@ npm install @candypay/elements @candypay/checkout-sdk
 
 ## Usage
 
-1. First, wrap your app in the `CheckoutProvider` component and import the `wallet-adapter-react-ui` styles as shown below:
+1. First, wrap your app in the `CheckoutProvider` component as shown below:
 
 ```tsx
 import { CheckoutProvider } from "@candypay/elements";
 import { AppProps } from "next/app";
-import("@solana/wallet-adapter-react-ui/styles.css" as any);
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <CheckoutProvider
-      publicApiKey={process.env[`NEXT_PUBLIC_CP_API`] as string}
+      network="mainnet" // or "devnet"
     >
       <Component {...pageProps} />
     </CheckoutProvider>
@@ -100,7 +99,8 @@ const handler: NextApiHandler = async (req, res) => {
     items: [
       {
         name: "Nike Air Force",
-        image: "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-shoes-WrLlWX.png",
+        image:
+          "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/b7d9211c-26e7-431a-ac24-b0540fb3c00f/air-force-1-07-shoes-WrLlWX.png",
         price: 0.1,
         quantity: 1,
       },
@@ -172,4 +172,4 @@ import { SuccessResponse } from "@candypay/elements";
 
 If you're using js, you can ignore assigning the type to the `onSuccess` prop.
 
-> **_NOTE:_**  If you're using Vercel serverless functions then the initial API request might take a while because of the cold start. 
+> **_NOTE:_** If you're using Vercel serverless functions then the initial API request might take a while because of the cold start.
