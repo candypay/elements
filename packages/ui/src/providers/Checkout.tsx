@@ -1,22 +1,23 @@
-import { ICheckoutContext } from "@/typings";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createContext, FC, ReactNode } from "react";
 
-const CheckoutContext = createContext<ICheckoutContext>({} as ICheckoutContext);
+interface IContext {
+  network: "mainnet" | "devnet";
+}
+
+const CheckoutContext = createContext<IContext>({} as IContext);
 
 const queryClient = new QueryClient();
 
 const CheckoutProvider: FC<{
   children: ReactNode;
-  publicApiKey: string;
-}> = ({ children, publicApiKey }) => {
+  network: "mainnet" | "devnet";
+}> = ({ children, network }) => {
   return (
-    <CheckoutContext.Provider
-      value={{
-        publicApiKey,
-      }}
-    >
+    <CheckoutContext.Provider value={{
+      network
+    }}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider>{children}</ChakraProvider>
       </QueryClientProvider>
