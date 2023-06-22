@@ -1,4 +1,3 @@
-import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createContext, FC, ReactNode } from "react";
 
@@ -19,7 +18,7 @@ const CheckoutProvider: FC<{
       network
     }}>
       <QueryClientProvider client={queryClient}>
-        <ChakraProvider>{children}</ChakraProvider>
+        {children}
       </QueryClientProvider>
     </CheckoutContext.Provider>
   );
