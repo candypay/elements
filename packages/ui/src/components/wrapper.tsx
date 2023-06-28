@@ -7,27 +7,11 @@ import { PayElement } from "./main";
 const queryClient = new QueryClient();
 
 // wraps the application in chakra provider
-export const ElementWrapper: FC<IProps> = ({
-  intentHandler,
-  onError,
-  onSuccess,
-  theme,
-  value,
-  className,
-}) => {
+export const ElementWrapper: FC<IProps> = ({ ...props }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider>
-        <PayElement
-          {...{
-            intentHandler,
-            onError,
-            onSuccess,
-            theme,
-            value,
-            className,
-          }}
-        />
+        <PayElement {...props} />
       </ChakraProvider>
     </QueryClientProvider>
   );
