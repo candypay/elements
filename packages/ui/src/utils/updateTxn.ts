@@ -1,4 +1,4 @@
-import { API_URL } from "@/lib";
+import { API_URL } from "@/config";
 import axios, { AxiosRequestConfig } from "axios";
 
 const updateTxn = async (

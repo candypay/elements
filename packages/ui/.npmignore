@@ -3,3 +3,4 @@ src
 .turbo
 tsconfig.json
 tsup.config.ts
+src/config.ts

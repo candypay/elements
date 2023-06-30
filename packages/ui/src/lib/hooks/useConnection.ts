@@ -1,5 +1,5 @@
 import { Connection } from "@solana/web3.js";
-import { MAINNET_RPC_URL } from "../constants/urls";
+import { MAINNET_RPC_URL } from "@/config";
 
 export const useConnection = (network: "mainnet" | "devnet") => {
   if (network === "devnet") {

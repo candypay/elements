@@ -1,9 +1,9 @@
+import { PAY_API_URL } from "@/config";
 import {
   DevnetTokens,
   DEVNET_TOKENS,
   MainnetTokens,
   MAINNET_TOKENS,
-  PAY_API_URL,
   reference,
 } from "@/lib";
 import { TTokens } from "@/typings";
