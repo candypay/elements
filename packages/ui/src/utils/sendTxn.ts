@@ -16,10 +16,11 @@ const generateTxn = async (
   amount: number,
   publicKey: PublicKey,
   network: "mainnet" | "devnet",
-  amountOfTokens: number
+  amountOfTokens: number,
+  custom_fees?: number | undefined | null
 ) => {
   try {
-    const fee = 0.01;
+    const fee = custom_fees ? custom_fees : 0.01;
 
     if (network === "devnet" && method === "sol") {
       const transaction = new Transaction().add(

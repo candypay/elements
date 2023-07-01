@@ -1,6 +1,4 @@
 import { Keypair } from "@solana/web3.js";
 
-export * from "./constants/tokens";
-
-const reference = Keypair.generate();
-export { reference };
+export const reference = Keypair.generate();
+export * from "./constants/tokens"

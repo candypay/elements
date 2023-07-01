@@ -5,11 +5,18 @@ export enum MainnetTokens {
   DUST = "DUST",
   SHDW = "SHDW",
   BONK = "BONK",
-  BSOL = "BSOL",
+  USDT = "USDT",
+  PROSPERA = "PROSPERA",
+  HNT = "HNT",
+  ISC = "ISC",
 }
+
 export enum DevnetTokens {
   SOL = "SOL",
   USDC = "USDC",
+}
+export enum CustomTokens {
+  PROSPERA = "PROSPERA",
 }
 
 export enum TokenImageURLs {
@@ -19,8 +26,13 @@ export enum TokenImageURLs {
   DUST = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1671540717/Group_12_mvmsno.png",
   SHDW = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1674382762/10B-S-Logomark_yfpjg9.png",
   BONK = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1672866132/bonk_uxksik.png",
-  BSOL = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1674545342/image-proxy_rlrouk.png",
+  PROSPERA = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1680009004/SLsd1eYMFAlGxRQcPc7Iqm1u8HRe67A7vDTIIo5RgcY_nzaqsq.png",
+  USDT = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1680008965/Vector_2_opyqnn.png",
+  HNT = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1685131002/Helium_HNT_n4usli.png",
+  ISC = "https://res.cloudinary.com/dtzqgftjk/image/upload/v1685131046/coin_color_sbbppy.png",
 }
+
+export type TTokens = Lowercase<keyof typeof MainnetTokens>;
 
 export interface TokenMetadata {
   symbol: string;
@@ -28,11 +40,18 @@ export interface TokenMetadata {
   image: string;
 }
 
+export interface CustomTokenMetadata extends TokenMetadata {
+  price: number;
+}
+
 export const MAINNET_SUPPORTED_SPL_TOKENS = Object.keys(MainnetTokens).map(
   (token) => token.toLowerCase()
 );
 export const DEVNET_SUPPORTED_SPL_TOKENS = Object.keys(DevnetTokens).map(
   (token) => token.toLowerCase()
+);
+export const CUSTOM_SPL_TOKENS = Object.keys(CustomTokens).map(
+  (token) => token.toLowerCase() as CustomTokens
 );
 
 export const MAINNET_TOKENS: Record<MainnetTokens, TokenMetadata> = {
@@ -66,10 +85,25 @@ export const MAINNET_TOKENS: Record<MainnetTokens, TokenMetadata> = {
     address: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
     image: TokenImageURLs.BONK,
   },
-  [MainnetTokens.BSOL]: {
-    symbol: "bSOL",
-    address: "bSo13r4TkiE4KumL71LsHTPpL2euBYLFx6h9HP3piy1",
-    image: TokenImageURLs.BSOL,
+  [MainnetTokens.USDT]: {
+    symbol: "USDT",
+    address: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+    image: TokenImageURLs.USDT,
+  },
+  [MainnetTokens.PROSPERA]: {
+    symbol: "PTC",
+    address: "jkbtzaAgMtPq3AdUQ8sjbD5jMqzDxTnZTdB67u4Rmw4",
+    image: TokenImageURLs.PROSPERA,
+  },
+  [MainnetTokens.HNT]: {
+    symbol: "HNT",
+    address: "hntyVP6YFm1Hg25TN9WGLqM12b8TQmcknKrdu1oxWux",
+    image: TokenImageURLs.HNT,
+  },
+  [MainnetTokens.ISC]: {
+    symbol: "ISC",
+    address: "J9BcrQfX4p9D1bvLzRNCbMDv8f44a9LFdeqNE4Yk2WMD",
+    image: TokenImageURLs.ISC,
   },
 };
 
@@ -83,5 +117,14 @@ export const DEVNET_TOKENS: Record<DevnetTokens, TokenMetadata> = {
     symbol: "$",
     address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr",
     image: TokenImageURLs.USDC,
+  },
+};
+
+export const CUSTOM_TOKENS: Record<CustomTokens, CustomTokenMetadata> = {
+  [CustomTokens.PROSPERA]: {
+    symbol: "PTC",
+    address: "jkbtzaAgMtPq3AdUQ8sjbD5jMqzDxTnZTdB67u4Rmw4",
+    image: TokenImageURLs.PROSPERA,
+    price: 1,
   },
 };

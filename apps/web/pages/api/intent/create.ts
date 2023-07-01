@@ -8,7 +8,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   try {
     const response = await candypay.paymentIntent.create({
-      tokens: ["shdw", "bonk"],
+      tokens: ["shdw", "bonk", "dust", "samo", "usdt"],
       items: [
         {
           name: "Test Product 1",

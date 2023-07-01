@@ -1,4 +1,4 @@
-import { MAINNET_TOKENS } from "@candypay/common";
+import { MAINNET_TOKENS } from "@/lib";
 import axios from "axios";
 
 type Token = {

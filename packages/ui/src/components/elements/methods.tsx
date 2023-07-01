@@ -16,12 +16,10 @@ const Methods: FC<IMethods> = ({
       </Text>
 
       <Grid
-        gap="1"
-        templateColumns={{
-          base: "repeat(4, 1fr)",
-          md: "repeat(3, 1fr)",
-          lg: "repeat(4, 1fr)",
-        }}
+        gap="2"
+        templateColumns={
+          methods.length >= 4 ? "repeat(4, 1fr)" : `repeat(${methods.length}, 1fr)`
+        }
         w="full"
         alignItems="center"
         justifyContent="center"

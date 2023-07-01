@@ -7,8 +7,8 @@ import { ITheme } from "@/typings";
 import { useTheme } from "@/lib/hooks/useTheme";
 
 export const ConnectButton: FC<{
-  theme: ITheme
-}> = ({theme}) => {
+  theme: ITheme;
+}> = ({ theme }) => {
   const { connecting, connected, select } = useWallet();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -18,7 +18,7 @@ export const ConnectButton: FC<{
     try {
       select(solanaWallet.adapter.name);
     } catch (e) {
-        console.error(e);
+      console.error(e);
     }
   };
 

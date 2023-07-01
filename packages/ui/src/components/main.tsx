@@ -30,12 +30,15 @@ const PayElement: FC<IProps> = ({
 
   const { network } = useContext(CheckoutContext);
 
+  const [user, setUser] = useState<any>(null);
+
   const { mutate, isLoading } = useMutation(
     ["generateIntent"],
     async () => {
       const res = await intentHandler();
       setMetadata(res.metadata as SessionMetadataResponse);
       setAvatar((res.user as any).avatar);
+      setUser(res.user);
 
       const tokens = ["sol", "usdc", ...(res.metadata as any).tokens.tokens];
       const prices = await fetchTokenPrices(tokens);
@@ -59,7 +62,7 @@ const PayElement: FC<IProps> = ({
         isOpen={isOpen}
         onClose={onClose}
         intentData={intentData}
-        {...{ onSuccess, onError, metadata, prices, avatar }}
+        {...{ onSuccess, onError, metadata, prices, avatar, user }}
         theme={theme!}
       />
       <Renderer
