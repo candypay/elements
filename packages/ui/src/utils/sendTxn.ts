@@ -7,7 +7,12 @@ import {
   reference,
 } from "@/lib";
 import { TTokens } from "@/typings";
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import {
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
 import axios, { AxiosRequestConfig } from "axios";
 
 const generateTxn = async (
@@ -20,7 +25,12 @@ const generateTxn = async (
   custom_fees?: number | undefined | null
 ) => {
   try {
-    const fee = custom_fees ? custom_fees : 0.01;
+    let fee;
+    if (custom_fees) {
+      fee = custom_fees;
+    } else {
+      fee = 0.01;
+    }
 
     if (network === "devnet" && method === "sol") {
       const transaction = new Transaction().add(
@@ -30,7 +40,7 @@ const generateTxn = async (
           lamports: LAMPORTS_PER_SOL * amountOfTokens,
         })
       );
-  
+
       return transaction;
     }
 
