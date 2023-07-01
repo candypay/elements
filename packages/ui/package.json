@@ -1,6 +1,6 @@
 {
   "name": "@candypay/elements",
-  "version": "0.0.21-alpha",
+  "version": "0.0.21",
   "publishConfig": {
     "access": "public"
   },
