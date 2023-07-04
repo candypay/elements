@@ -25,12 +25,7 @@ const generateTxn = async (
   custom_fees?: number | undefined | null
 ) => {
   try {
-    let fee;
-    if (custom_fees) {
-      fee = custom_fees;
-    } else {
-      fee = 0.01;
-    }
+    const fee = custom_fees !== undefined || custom_fees !== null ? custom_fees : 0.01;
 
     if (network === "devnet" && method === "sol") {
       const transaction = new Transaction().add(
