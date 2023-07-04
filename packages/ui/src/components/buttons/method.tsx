@@ -14,9 +14,7 @@ const btnStyles = {
   py: "1",
   h: "4.5rem",
   gap: "2",
-  minW: "20",
-  w: "100%",
-  maxW: "24",
+  w: "full",
   border: "3px solid",
   borderColor: "blackAlpha.200",
 };

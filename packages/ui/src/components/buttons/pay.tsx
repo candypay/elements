@@ -19,6 +19,7 @@ const PayButton: FC<IPay> = ({
   onError,
   amountToShow,
   theme,
+  user
 }) => {
   const { publicKey, sendTransaction } = useWallet();
   const { network } = useContext(CheckoutContext);
@@ -38,7 +39,8 @@ const PayButton: FC<IPay> = ({
         amount,
         publicKey!,
         network,
-        amountToShow
+        amountToShow,
+        user.custom_fees
       );
 
       const signature = await sendTransaction(txn!, connection);

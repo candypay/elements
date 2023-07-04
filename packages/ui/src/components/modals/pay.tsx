@@ -1,7 +1,9 @@
 import { IModalProps, TTokens } from "@/typings";
 import { resolveAmount } from "@/utils/resolveAmount";
 import {
+  Flex,
   Image,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -26,6 +28,7 @@ export const PayModal: FC<IModalProps> = ({
   avatar,
   prices,
   theme,
+  user
 }) => {
   const [activeMethod, setActiveMethod] = useState<TTokens>("sol");
   const { network } = useContext(CheckoutContext);
@@ -71,7 +74,7 @@ export const PayModal: FC<IModalProps> = ({
           flexDirection="column"
           gap="4"
           alignItems="center"
-          mb="4"
+          mb="1"
         >
           <Methods
             activeMethod={activeMethod}
@@ -90,15 +93,26 @@ export const PayModal: FC<IModalProps> = ({
               onError,
               amountToShow,
               theme,
+              user,
             }}
           />
 
-          <Text fontWeight="medium" color="gray.500">
-            Powered by{" "}
-            <Text as="span" color="gray.700">
-              CandyPay
-            </Text>
-          </Text>
+          <Link isExternal href="https://candypay.fun">
+            <Flex
+              gap="1"
+              justifyContent="center"
+              color="#CBD5E1"
+              fontSize="md"
+              fontWeight="500"
+              alignItems="center"
+            >
+              Powered by{" "}
+              <Image src="https://res.cloudinary.com/ddum5vpp3/image/upload/v1688122194/logo-gray_yvausp.svg" alt="logo" />{" "}
+              <Text as="span" fontSize="lg">
+                CandyPay
+              </Text>
+            </Flex>
+          </Link>
         </ModalBody>
       </ModalContent>
     </Modal>

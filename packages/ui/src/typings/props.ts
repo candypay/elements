@@ -36,6 +36,7 @@ interface IModalProps {
   prices: PricesEntity[];
   avatar: string;
   theme: ITheme;
+  user: any;
 }
 
 interface IPay {
@@ -48,6 +49,7 @@ interface IPay {
   onError?: Function;
   amountToShow: number;
   theme: ITheme;
+  user: any;
 }
 
 interface IRendererProps {

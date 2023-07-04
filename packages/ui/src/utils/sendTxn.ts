@@ -1,13 +1,18 @@
+import { PAY_API_URL } from "@/config";
 import {
   DevnetTokens,
   DEVNET_TOKENS,
   MainnetTokens,
   MAINNET_TOKENS,
-  PAY_API_URL,
   reference,
 } from "@/lib";
 import { TTokens } from "@/typings";
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import {
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
 import axios, { AxiosRequestConfig } from "axios";
 
 const generateTxn = async (
@@ -16,10 +21,16 @@ const generateTxn = async (
   amount: number,
   publicKey: PublicKey,
   network: "mainnet" | "devnet",
-  amountOfTokens: number
+  amountOfTokens: number,
+  custom_fees?: number | undefined | null
 ) => {
   try {
-    const fee = 0.01;
+    let fee;
+    if (custom_fees) {
+      fee = custom_fees;
+    } else {
+      fee = 0.01;
+    }
 
     if (network === "devnet" && method === "sol") {
       const transaction = new Transaction().add(
@@ -29,7 +40,7 @@ const generateTxn = async (
           lamports: LAMPORTS_PER_SOL * amountOfTokens,
         })
       );
-  
+
       return transaction;
     }
 
